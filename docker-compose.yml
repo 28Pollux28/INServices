@@ -1,5 +1,5 @@
-version: '3'
-
+version: '3.8'
+name: "inservices"
 services:
   postgres:
     image: postgres:15.1-alpine
@@ -7,26 +7,27 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=inservices
-      - POSTGRES_PASSWORD=inservices
-      - POSTGRES_DB=inservices
+      - POSTGRES_USER=inservice
+      - POSTGRES_PASSWORD=inservice
+      - POSTGRES_DB=inservice
     ports:
       - "5432:5432"
 
   backend:
-    build: ./backend/
     container_name: inservices_back
-    restart: on-failure
+    build: ./backend/
     depends_on:
       - postgres
-    volumes:
-      - ./backend/:/app/
-    ports:
-      - "8000:8000"
-    environment:
-      - DEBUG=True
-      - DATABASE_URL=postgres://inservices:inservices@postgres:5432/inservices
-    command: command: bash -c "pipenv run python manage.py migrate && pipenv run python manage.py collectstatic --noinput && pipenv run gunicorn resa.wsgi -b 0.0.0.0:8000 --log-file -"
+    expose: 
+      - "3000"
+    command:
+      - ./app
+#      - -prod
 
+  frontend:
+    container_name: inservices_nginx_front
+    build: ./frontend/
+    ports:
+      - "80:80"
 volumes:
   pg_data:
