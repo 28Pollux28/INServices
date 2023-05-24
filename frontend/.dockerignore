@@ -1,0 +1,5 @@
+# Dev tools
+.git
+.idea
+node_modules
+build
