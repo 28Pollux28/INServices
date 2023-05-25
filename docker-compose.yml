@@ -7,9 +7,9 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=inservice
-      - POSTGRES_PASSWORD=inservice
-      - POSTGRES_DB=inservice
+      - POSTGRES_USER=inservices
+      - POSTGRES_PASSWORD=inservices
+      - POSTGRES_DB=inservices
     ports:
       - "5432:5432"
 
