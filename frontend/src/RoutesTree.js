@@ -1,8 +1,8 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
 
-import Home from "./component/Home/Home";
-import {NotFound} from "./component/Error/Error";
+import Home from "./view/Home/Home";
+import {NotFound} from "./view/Error/Error";
 
 const RoutesTree = () => {
     return (
