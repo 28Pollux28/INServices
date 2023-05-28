@@ -4,7 +4,7 @@ import jwt from "jwt-decode";
 export default {
     login: async (email, password) => {
         try {
-            const response = await client.post('auth/token/', {
+            const response = await client.post('auth/login/', {
                 email,
                 password
             });
@@ -20,13 +20,36 @@ export default {
         }
     },
 
-    logout: () => {
+    logout: async () => {
         localStorage.removeItem('token');
+        return true;
     },
 
-    register: (data) => {
-        // not implemented yet
-        console.log(data);
+    register: async (data) => {
+        try {
+            const response = await client.post('auth/register/', data);
+            if (response.data.access) {
+                localStorage.setItem("token", JSON.stringify(response.data));
+                return [true, null];
+            }
+            return false
+        } catch (error) {
+            return [false, error.response.data];
+        }
+    },
+    verifyEmail: async (token) => {
+        try {
+            const response = await client.post('auth/verify/', {
+                token
+            });
+            if (response.data.access) {
+                localStorage.setItem("token", JSON.stringify(response.data));
+                return true;
+            }
+            return false
+        } catch (error) {
+            return false;
+        }
     },
 
     get: () => {
@@ -50,6 +73,13 @@ export default {
         return null;
     },
 
+    getRefreshToken: () => {
+        const token = JSON.parse(localStorage.getItem("token"));
+
+        if (token && token.refresh)
+            return token.refresh;
+    },
+
     updateToken: (accessToken) => {
         const token = JSON.parse(localStorage.getItem("token"));
 
@@ -59,4 +89,3 @@ export default {
         }
     }
 };
-
