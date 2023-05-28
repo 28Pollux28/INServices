@@ -56,8 +56,7 @@ export default {
         const token = JSON.parse(localStorage.getItem('token'));
 
         if (token && token.access) {
-            const user = jwt(token.access); // decode the JWT token
-            return user;
+            return jwt(token.access);
         }
 
         return null;

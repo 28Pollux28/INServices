@@ -72,7 +72,7 @@ const Login = () => {
                                         required: true,
                                         validate: value => {
                                             let match = value.toString().match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/g);
-                                            return true || (value.length >= 8 && match !== null);
+                                            return value.length >= 8 && match !== null;
                                         }
                                     })} />
                                     {errors.password && <Alert variant="danger">

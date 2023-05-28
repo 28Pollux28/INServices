@@ -1,6 +1,6 @@
-import {Navigate, useNavigate, useParams} from "react-router-dom";
+import {Navigate, useParams} from "react-router-dom";
 import user from "../../request/service/User";
-import React, {useEffect} from "react";
+import React from "react";
 
 
 async function verifyEmail(token) {
