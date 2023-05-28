@@ -27,7 +27,7 @@ func AuthRoutes(router fiber.Router) {
 				return []byte(utils.GetEnv("JWT_SECRET", "secret")), nil
 			})
 			if err != nil {
-				continue
+				db.Delete(&token)
 			}
 			// If token is expired, delete it
 			cl := parse.Claims.(jwt.MapClaims)
