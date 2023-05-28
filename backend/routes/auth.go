@@ -28,13 +28,13 @@ func AuthRoutes(router fiber.Router) {
 			})
 			if err != nil {
 				db.Delete(&token)
+				continue
 			}
 			// If token is expired, delete it
 			cl := parse.Claims.(jwt.MapClaims)
 			if !cl.VerifyExpiresAt(time.Now().Unix(), true) {
 				db.Delete(&token)
 			}
-
 		}
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"message": "success",

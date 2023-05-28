@@ -12,6 +12,9 @@ var templEmailVerifTxt = pongo2.Must(pongo2.FromFile("static/templates/email/ema
 
 func SendEmailVerification(client *mailjet.Client, user models.User, token string) error {
 	strHTML, err := templEmailVerifHTML.Execute(pongo2.Context{"user": user, "token": token})
+	if err != nil {
+		return err
+	}
 	strTxt, err := templEmailVerifTxt.Execute(pongo2.Context{"user": user, "token": token})
 	if err != nil {
 		return err
