@@ -1,28 +1,24 @@
 package database
 
 import (
-	"fmt"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"inservice/models"
-	"sync"
 )
 
-var (
-	db []*models.User
-	mu sync.Mutex
-)
-
-// Connect with database
-func Connect() {
-	db = make([]*models.User, 0)
-	fmt.Println("Connected with Database")
-}
-
-func Insert(user *models.User) {
-	mu.Lock()
-	db = append(db, user)
-	mu.Unlock()
-}
-
-func Get() []*models.User {
-	return db
+// Connect with postgres database
+func Connect(dbUrl string) (*gorm.DB, error) {
+	db, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+	err = db.AutoMigrate(
+		&models.User{},
+		&models.Offer{},
+		&models.RefreshToken{},
+	)
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }

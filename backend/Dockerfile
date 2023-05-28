@@ -25,7 +25,11 @@ COPY ./static ./static
 
 # `boilerplate` should be replaced here as well
 COPY --from=build /go/src/inservice/app .
-
+ENV DB_HOST="postgres"
+ENV DB_PORT="5432"
+ENV DB_USER="inservices"
+ENV DB_PASSWORD="inservices"
+ENV DB_NAME="inservices"
 # Add packages
 RUN apk -U upgrade \
     && apk add --no-cache dumb-init ca-certificates \
