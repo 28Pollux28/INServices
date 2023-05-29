@@ -8,7 +8,6 @@ export const publicClient = axios.create({
 
 export const privateClient = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
-    headers: { Authorization: `Bearer ${User.getToken()}` },
 });
 
 privateClient.interceptors.request.use(
@@ -31,13 +30,13 @@ privateClient.interceptors.response.use(
     async (err) => {
         const originalConfig = err.config;
 
-        if (!originalConfig.url.includes("/auth/signin/") && err.response) {
+        if (!originalConfig.url.includes("/auth/login/") && err.response) {
             // Access Token was expired
             if (err.response.status === 401 && !originalConfig._retry) {
                 originalConfig._retry = true;
 
                 try {
-                    const rs = await privateClient.post("/auth/token/refresh/", {
+                    const rs = await privateClient.post("/auth/refresh/", {
                         refresh: User.getRefreshToken(),
                     });
 

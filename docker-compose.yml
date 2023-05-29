@@ -18,8 +18,15 @@ services:
     build: ./backend/
     depends_on:
       - postgres
-    expose: 
-      - "3000"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=inservices
+      - DB_PASSWORD=inservices
+      - DB_NAME=inservices
+      - JWT_SECRET=secret
+    ports: 
+      - "3000:3000"
     command:
       - ./app
 #      - -prod
@@ -29,5 +36,7 @@ services:
     build: ./frontend/
     ports:
       - "80:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000/api/v1/
 volumes:
   pg_data:
