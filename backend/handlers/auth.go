@@ -335,6 +335,7 @@ func createToken(c *fiber.Ctx, user models.User) (string, string, error) {
 	claims["email"] = user.Email
 	claims["phone"] = user.Phone
 	claims["email_verified"] = user.EmailVerified
+	claims["karmas"] = user.Karmas
 
 	// Generate encoded token and send it as response.
 	t, err := token.SignedString([]byte(utils.GetEnv("JWT_SECRET", "secret")))
