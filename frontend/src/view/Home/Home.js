@@ -4,21 +4,15 @@ import {Alert} from "react-bootstrap";
 import Annonces from "../../component/Annonces/Annonces";
 import Intro from '../../component/Intro/Intro';
 
+import annoncesData from '../../annoncesData';
+
 
 
 
 const Home = () => {
     const location = useLocation();
 
-
-    const data=[
-        { firstname : "Baptiste",lastnamee:"Parpette", photoProfil:"https://picsum.photos/50/50" ,titre: "Annonce 1", description: "Description 1", prix: 10, image: "https://picsum.photos/300/300" },
-        { firstname : "Baptiste",lastnamee:"Parpette", photoProfil:"https://picsum.photos/50/50" ,titre: "Annonce 2", description: "Description 2", prix: 20, image: "https://picsum.photos/300/300" },
-        { firstname : "Baptiste",lastnamee:"Parpette", photoProfil:"https://picsum.photos/50/50" ,titre: "Annonce 3", description: "Description 3", prix: 30, image: "https://picsum.photos/300/300" },
-        { firstname : "Baptiste",lastnamee:"Parpette", photoProfil:"https://picsum.photos/50/50" ,titre: "Annonce 4", description: "Description 4", prix: 40, image: "https://picsum.photos/300/300" },
-        { firstname : "Baptiste",lastnamee:"Parpette", photoProfil:"https://picsum.photos/50/50" ,titre: "Annonce 5", description: "Description 5", prix: 50, image: "https://picsum.photos/300/300" },
-        { firstname : "Baptiste",lastnamee:"Parpette", photoProfil:"https://picsum.photos/50/50" ,titre: "Annonce 6", description: "Description 6", prix: 60, image: "https://picsum.photos/300/300" },
-        ]
+    const data = annoncesData;
 
     return (
         <>

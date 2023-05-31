@@ -8,7 +8,8 @@ const Annonces = ({ annonces }) => {
     return (
         <Container>
         <Row>
-            {annonces.map((annonce, index) => (
+        {annonces.filter(annonce => annonce.visible).map((annonce, index) => 
+            (
                 <Col key={index} style={{display: 'flex', justifyContent: 'center',marginTop:'10px'}}>
                     <Annonce annonce={annonce} />
                 </Col>
