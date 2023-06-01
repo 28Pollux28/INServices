@@ -1,13 +1,9 @@
 a.linkStyle{
     text-decoration: none;
-    
 }
-
 a.linkStyle:hover{
     text-decoration: underline;
-
 }
-
 div.imageKarmaCoin{
     width: 10%
 }

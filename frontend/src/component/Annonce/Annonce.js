@@ -12,19 +12,15 @@ const Annonce = ({ annonce }) => {
     const truncateText = (text, maxLength) => {
         if (text.length > maxLength) {
             return (<div><span className='mb-0'>{text.substring(0, maxLength) + ' ...'}</span> <a className="link-dark linkStyle" href='##'><span className="fw-semibold fst-italic">{"en savoir plus"}</span></a></div>);
-
-        } else {
-            return text;
         }
+        return text;
     }
 
     const truncateTitle = (text, maxLength) => {
         if (text.length > maxLength) {
             return text.substring(0, maxLength) + "...";
-
-        } else {
-            return text;
         }
+        return text;
     }
 
     return (

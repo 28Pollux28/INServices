@@ -1,6 +1,6 @@
 import React from "react";
-import {useLocation} from "react-router-dom";
-import {Alert} from "react-bootstrap";
+import { useLocation } from "react-router-dom";
+import { Alert } from "react-bootstrap";
 import Annonces from "../../component/Annonces/Annonces";
 import Intro from '../../component/Intro/Intro';
 
@@ -11,7 +11,6 @@ import annoncesData from '../../annoncesData';
 
 const Home = () => {
     const location = useLocation();
-
     const data = annoncesData;
 
     return (
@@ -29,11 +28,9 @@ const Home = () => {
             </Alert>
             }
 
-
-            
-            <Intro/>
+            <Intro />
             <h1 className="my-2">Les dernière annonces</h1>
-            <Annonces annonces={data}/>
+            <Annonces annonces={data} />
         </>
     );
 }
