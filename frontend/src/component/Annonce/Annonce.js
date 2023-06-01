@@ -4,55 +4,73 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import KarmaCoin from '../../karmaCoin.svg';
+import Container from 'react-bootstrap/esm/Container';
+import './Annonce.css';
 
 const Annonce = ({ annonce }) => {
 
     const truncateText = (text, maxLength) => {
         if (text.length > maxLength) {
-            return text.substring(0, maxLength) + "... En savoir plus";
+            return (<div><span className='mb-0'>{text.substring(0, maxLength) + ' ...'}</span> <a className="link-dark linkStyle" href='##'><span className="fw-semibold fst-italic">{"en savoir plus"}</span></a></div>);
+
+        } else {
+            return text;
+        }
+    }
+
+    const truncateTitle = (text, maxLength) => {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + "...";
+
         } else {
             return text;
         }
     }
 
     return (
-        <Card style={{ height:'35rem',width: '18rem' , textAlign:'left'}}>
+        <Card className="text-start" >
             <Card.Body className="d-flex flex-column">
-                <Row className="align-items-center" style={{margin:'0'}}>
-                    <Col xs={2} style={{ padding: 0 }}>
-                        <Card.Img src={annonce.photoProfil} style={{width: '50px'}} />
-                    </Col>
-                    <Col style={{ paddingLeft: 10 }}>
-                        <Card.Subtitle className="text-muted" style={{ marginLeft: 10 }}>{annonce.firstName} {annonce.lastName}</Card.Subtitle>
-                    </Col>
-                </Row>
-                <Card.Title>{annonce.titreAnnonce}</Card.Title>
-                <Card.Img variant="top" src={annonce.imageAnnonce}   />
-                <Card.Text style={{ maxHeight: '5rem', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {truncateText(annonce.descriptionAnnonce, 85)}
-                </Card.Text>
-
-                <div style={{marginTop: 'auto'}}>
-                    <Row className="align-items-center" style={{margin:'0'}}>
-                        <Col style={{padding:0}}>
-                            <Card.Text>
-                            Récompense :
-                            </Card.Text>
+                <div className='h-25'>
+                    <Row className="align-items-center m-0 pb-1">
+                        <Col className="p-0" xs={2}>
+                            <Card.Img className="" src={annonce.photoProfil} />
                         </Col>
-                        <Col style={{padding:0, textAlign:'right', marginRight:'15px'}}>
-                            <Card.Text>
-                            {annonce.recompence}
-                            </Card.Text>
-                        </Col>
-                        <Col xs={2} style={{ padding: 0 }}>
-                            <Card.Img src={KarmaCoin} style={{width: '35px'}} />
+                        <Col>
+                            <Card.Subtitle className="ms-2 text-muted">{annonce.firstName} {annonce.lastName}</Card.Subtitle>
                         </Col>
                     </Row>
+                    <a href='#' className="link-dark linkStyle"><Card.Title className='fw-semibold'>{truncateTitle(annonce.titreAnnonce, 42)}</Card.Title></a>
+                </div>
+                <div>
+                    <Card.Img variant="top" src={annonce.imageAnnonce} />
+                    <Card.Text>
+                        {truncateText(annonce.descriptionAnnonce, 85)}
+                    </Card.Text>
 
-                    <Button variant="primary" style={{marginTop: '10px',display: 'flex',margin:'auto'}}>Contacter</Button>
+                    <div className="mt-auto">
+                        <div className="d-flex m-0">
+
+                            <Card.Text className="mb-0 me-auto align-self-center">
+                                Récompense :
+                            </Card.Text>
+
+                            <Card.Text className='mb-0 pe-3 align-self-center' >
+                                {annonce.recompence}
+                            </Card.Text>
+
+                            <Container className="m-0 p-0 imageKarmaCoin" >
+                                <Card.Img src={KarmaCoin} />
+                            </Container>
+
+                        </div>
+
+                        <Button variant="primary" className="d-flex m-auto mt-1">Contacter</Button>
+                    </div>
                 </div>
             </Card.Body>
         </Card>
+
+
     );
 };
 

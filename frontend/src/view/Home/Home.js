@@ -32,7 +32,7 @@ const Home = () => {
 
             
             <Intro/>
-            <h1>Les dernière annonces</h1>
+            <h1 className="my-2">Les dernière annonces</h1>
             <Annonces annonces={data}/>
         </>
     );

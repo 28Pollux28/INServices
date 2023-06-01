@@ -7,10 +7,10 @@ import Col from 'react-bootstrap/Col';
 const Annonces = ({ annonces }) => {
     return (
         <Container>
-        <Row>
+        <Row xs ={1} md={2} lg={3} xl={4}>
         {annonces.filter(annonce => annonce.visible).map((annonce, index) => 
             (
-                <Col key={index} style={{display: 'flex', justifyContent: 'center',marginTop:'10px'}}>
+                <Col key={index} className= "d-flex justify-content-center mt-4">
                     <Annonce annonce={annonce} />
                 </Col>
             ))}

@@ -14,9 +14,11 @@ const Intro = () => {
 
     return (
         <Row className="align-items-center">
-            <Col md={6}>
+            <Col md={6} >
+                <div className='mx-2'>
                 <h1>{headerContent.title}</h1>
                 <p>{headerContent.description}</p>
+                </div>
                 <Button variant="primary">{headerContent.buttonText}</Button>
             </Col>
             <Col md={6}>
