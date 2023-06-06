@@ -3,12 +3,12 @@ import './App.css';
 import Button from './Button';
 import RoutesTree from "./RoutesTree";
 import ResponsiveAppBar from "./component/Header/Header";
-import NavBar from "./component/Header/Header";
+import {NavBarConnected,NavBarNotConnected} from "./component/Header/Header";
 
 function App() {
     return (
         <div className="App">
-            <NavBar/>
+            <NavBarConnected/>
             <RoutesTree/>
             {/*<Footer/>*/}
         </div>

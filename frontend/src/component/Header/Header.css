@@ -1,7 +1,117 @@
+HeaderCSS
+
 .App-bar {
-    background-color: white!important;
+  background-color: white !important;
 }
 
 .App-logo {
-    height: 5vmin;
+  height: 5vmin;
 }
+
+.navbar {
+  background-color: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.brand-name {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 36px; /* Ajustez la taille de la police selon vos besoins */
+  margin-left: 10px; /* Ajustez la marge gauche selon vos besoins */
+  font-weight: 700;
+  padding-right: 160px;
+  color: #000000;
+}
+
+.navbar.brand {
+  position: absolute;
+  left: 12.86%;
+  right: 72.71%;
+  top: 2.4%;
+  bottom: 95.68%;
+
+  transform: matrix(1, 0, 0, -1, 0, 0);
+}
+
+/* Styles pour les NavLink dans la Navbar */
+.list-item {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 29px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-top: 10px;
+  color: #000000;
+}
+
+/* Styles spécifiques pour la Navbar en mode paysage */
+.navbar-landscape .askings {
+  margin-right: 10px;
+}
+
+.navbar-landscape .connect {
+  margin-right: 10px;
+}
+
+.navbar-landscape .inscription {
+  margin-right: 10px;
+}
+
+/* Media Query pour ajuster la Navbar en mode paysage */
+@media screen and (orientation: landscape) {
+  .navbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+  }
+}
+
+.inscription {
+    background: #4C97C0;
+    border-radius: 11px;
+}
+
+.info-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.info-column {
+  display: flex;
+  flex-direction: line;
+  align-items: flex-start;
+}
+
+.tokens {
+  vertical-align: middle;
+  font-size: 36px; /* Ajustez la taille de la police selon vos besoins */
+  margin-left: 10px; /* Ajustez la marge gauche selon vos besoins */
+  font-weight: 700;
+}
+
+.name {
+  margin-bottom: 5px;
+}
+
+.image-container {
+  margin-left: 20px; /* Ajustez la marge selon vos besoins */
+}
+
+.image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  /* Autres styles d'image si nécessaire */
+}
+
+.coin {
+  width: 52px;
+  height: 52px;
+}
+
