@@ -11,6 +11,7 @@ type User struct {
 	Phone         string `gorm:"unique" json:"phone"`
 	EmailVerified bool   `gorm:"default:false" json:"email_verified"`
 	Karmas        int    `gorm:"default:20" json:"karmas"`
+	Avatar        string `json:"avatar" gorm:"default:default_avatar.png"`
 	Offers        []Offer
 	RefreshTokens []RefreshToken
 }
@@ -20,6 +21,7 @@ type PublicUser struct {
 	Name     string `json:"name"`
 	Surname  string `json:"surname"`
 	Username string `json:"username"`
+	Avatar   string `json:"avatar"`
 }
 
 // Private user struct
@@ -31,6 +33,7 @@ type PrivateUser struct {
 	Phone         string `json:"phone"`
 	EmailVerified bool   `json:"email_verified"`
 	Karmas        int    `json:"karmas"`
+	Avatar        string `json:"avatar"`
 }
 
 func (u *User) Public() *PublicUser {
@@ -38,6 +41,7 @@ func (u *User) Public() *PublicUser {
 		Name:     u.Name,
 		Surname:  u.Surname,
 		Username: u.Username,
+		Avatar:   u.Avatar,
 	}
 }
 
@@ -50,5 +54,6 @@ func (u *User) Private() *PrivateUser {
 		Phone:         u.Phone,
 		EmailVerified: u.EmailVerified,
 		Karmas:        u.Karmas,
+		Avatar:        u.Avatar,
 	}
 }

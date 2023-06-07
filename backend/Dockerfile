@@ -1,6 +1,5 @@
 # Building the binary of the App
 FROM golang:1.19 AS build
-
 # `boilerplate` should be replaced with your project name
 WORKDIR /go/src/inservice
 
@@ -21,7 +20,13 @@ WORKDIR /app
 
 # Create the `public` dir and copy all the assets into it
 RUN mkdir ./static
+RUN mkdir ./uploads; exit 0
+RUN mkdir ./uploads/users; exit 0
+RUN mkdir ./uploads/users/50
+RUN mkdir ./uploads/users/200
 COPY ./static ./static
+COPY ./default_avatar200.png ./uploads/users/200/default_avatar200.png
+COPY ./default_avatar50.png ./uploads/users/50/default_avatar50.png
 
 # `boilerplate` should be replaced here as well
 COPY --from=build /go/src/inservice/app .
@@ -33,7 +38,10 @@ ENV DB_NAME="inservices"
 # Add packages
 RUN apk -U upgrade \
     && apk add --no-cache dumb-init ca-certificates \
-    && chmod +x /app/app
+    && chmod +x /app/app \
+    && rm -rf /var/cache/apk/* \
+    && rm -rf /tmp/* \
+    && rm -rf /var/log/*
 
 # Exposes port 3000 because our program listens on that port
 EXPOSE 3000

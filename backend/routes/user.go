@@ -8,8 +8,7 @@ import (
 func UserRoutes(router fiber.Router, jwtMiddleware *fiber.Handler) {
 	user := router.Group("/user")
 	public := user.Group("/public")
-	public.Post("/login", handlers.Login)
-
+	public.Post("/:id", handlers.GetPubUser)
 	restricted := user.Group("/restricted", *jwtMiddleware)
-	restricted.Get("/profile", handlers.Login)
+	restricted.Post("/avatar", handlers.UploadUserAvatar)
 }

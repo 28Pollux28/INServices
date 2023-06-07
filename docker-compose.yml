@@ -18,6 +18,8 @@ services:
     build: ./backend/
     depends_on:
       - postgres
+    volumes:
+        - uploads:/app/uploads
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -28,7 +30,7 @@ services:
     ports: 
       - "3000:3000"
     command:
-      - ./app
+      - /app/app
 #      - -prod
 
   frontend:
@@ -40,3 +42,4 @@ services:
       - REACT_APP_API_URL=http://localhost:3000/api/v1
 volumes:
   pg_data:
+  uploads:
