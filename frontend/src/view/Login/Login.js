@@ -59,12 +59,10 @@ const Login = () => {
                                             {errors.password.type === 'server' && errors.password.message}
                                         </Alert>}
                                     </Form.Group>
-
                                     <button className="btn btn-primary my-3" onClick={handleSubmit(onSubmit)}>Connexion</button>
                                 </Form>
                             </Card.Body>
                         </Card>
-
                     </Col>
                     <Col></Col>
                 </Row>
