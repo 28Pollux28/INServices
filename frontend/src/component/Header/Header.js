@@ -8,30 +8,15 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 export function NavBarNotConnected() {
-  const [isLandscape, setIsLandscape] = useState(false);
-
-  useEffect(() => {
-    const handleOrientationChange = () => {
-      setIsLandscape(window.orientation === 90 || window.orientation === -90);
-    };
-
-    handleOrientationChange(); // Vérifier l'orientation initiale
-
-    window.addEventListener("orientationchange", handleOrientationChange);
-
-    return () => {
-      window.removeEventListener("orientationchange", handleOrientationChange);
-    };
-  }, []);
-
+  
   return (
     <Navbar
       bg="light"
       expand="lg"
-      className={isLandscape ? "navbar-landscape" : ""}
+      className="bg-white shadow-sm"
     >
       <Container>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand className="d-flex align-items-center" href="#home">
           <img
             alt=""
             src={logo}
@@ -39,7 +24,7 @@ export function NavBarNotConnected() {
             height="59.52"
             className="d-inline-block align-top"
           />{" "}
-          <span className="brand-name">INService</span>
+          <span className="d-inline-block ms-2 fs-3 fw-bold text-dark">INSERVICE</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -61,7 +46,7 @@ export function NavBarNotConnected() {
             <Nav.Link className="connect" href="link">
               Se connecter
             </Nav.Link>
-            <Nav.Link className="inscription" href="link">
+            <Nav.Link className="bg-primary rounded-pill" href="link">
               S'inscrire
             </Nav.Link>
           </Nav>
@@ -76,132 +61,63 @@ export function NavBarConnected() {
   const [nom, setNom] = useState("Parpette"); // Définition de l'état pour le nom et prénom
   const [prenom, setprenom] = useState("Baptiste");
 
-  const [isLandscape, setIsLandscape] = useState(false);
-
-  useEffect(() => {
-    const handleOrientationChange = () => {
-      setIsLandscape(window.orientation === 90 || window.orientation === -90);
-    };
-
-    handleOrientationChange(); // Vérifier l'orientation initiale
-
-    window.addEventListener("orientationchange", handleOrientationChange);
-
-    return () => {
-      window.removeEventListener("orientationchange", handleOrientationChange);
-    };
-  }, []);
 
   return (
-    <Navbar
-      bg="light"
-      expand="lg"
-      className={isLandscape ? "navbar-landscape" : ""}
-    >
-      <Container>
-        <Navbar.Brand href="#home">
-          <img
-            alt=""
-            src={logo}
-            width="65.2" //Changer les valeurs codées en dur Valeur relative à l
-            height="59.52"
-            className="d-inline-block align-top"
-          />{" "}
-          <span className="brand-name">INService</span>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link
-              className="offers"
-              href="frontend\src\view\Login\Login.js"
-            >
-              Les offres
-            </Nav.Link>
-            <Nav.Link className="ranking" href="link">
-              Classement
-            </Nav.Link>
-            <Nav.Link className="askings" href="link">
-              Les demandes
-            </Nav.Link>
-            <Nav.Link className="message" href="link">
-              Mes Messages
-            </Nav.Link>
-          </Nav>
-          <Nav className="ms-auto">
-            <Nav.Link className="info" href="link">
-              <div className="info-container">
-              <div className="tokens">{tokens}</div>
-              <div className="coin-container">
-                  <img src={coin} alt="" className="coin" />
-                </div>
-                <div className="info-column">
-                  <div className="name">{nom}<br />{prenom}</div>
-                </div>
-                <div className="image-container">
-                  <img src={pp} alt="" className="image" />
-                </div>
+<Navbar bg="light" expand="lg">
+  <Container>
+    <Navbar.Brand href="#home" className="d-flex align-items-center">
+      <img
+        alt=""
+        src={logo}
+        width="65.2"
+        height="59.52"
+        className="d-inline-block align-top"
+      />{" "}
+      <span className="d-inline-block ms-2 fs-3 fw-bold text-dark">INSERVICE</span>
+    </Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto">
+        <Nav.Link className="offers" href="frontend\src\view\Login\Login.js">
+          Les offres
+        </Nav.Link>
+        <Nav.Link className="ranking" href="link">
+          Classement
+        </Nav.Link>
+        <Nav.Link className="askings" href="link">
+          Les demandes
+        </Nav.Link>
+        <Nav.Link className="message" href="link">
+          Mes Messages
+        </Nav.Link>
+      </Nav>
+      <Nav className="ms-auto">
+        <Nav.Link className="info" href="link">
+          <div className="d-flex align-items-center gap-2 text-decoration-none">
+            <div className="fs-2 fw-bold text-decoration-none"> {tokens}</div>
+            <div className="coin-container">
+              <img src={coin} alt="" className="w-52 h-52" />
+            </div>
+            <div className="d-flex flex-row align-items-start">
+              <div className="mb-1">
+                {nom}
+                <br />
+                {prenom}
               </div>
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
-}
-
-export function NavBarTest() {
-  const menuData = [
-    {
-      path: "/offres",
-      name: "Les offres",
-    },
-    {
-      path: "/offres",
-      name: "Les offres",
-    },
-    {
-      path: "/ranking",
-      name: "Classement",
-    },
-    {
-      path: "/askings",
-      name: "Les demandes",
-    },
-    {
-      path: "/connect",
-      name: "Se connecter",
-    },
-    {
-      path: "/inscription",
-      name: "S'inscrire",
-    },
-  ];
-
-  return (
-    <Navbar bg="light" expand="lg">
-      <Container>
-        <Navbar.Brand className="brand" href="#home">
-          <img
-            alt=""
-            src={logo}
-            width="65.2"
-            height="59.52"
-            className="d-inline-block align-top"
-          />{" "}
-          <span className="brand-name">INService</span>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            {menuData.map((item) => (
-              <NavLink to={item.path} key={item.name}>
-                <div className="list_item">{item.name}</div>
-              </NavLink>
-            ))}
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+            </div>
+            <div className="ms-3">
+              <img
+                src={pp}
+                alt="Photo de profil"
+                className="rounded-circle"
+                style={{ width: '50px', height: '50px' }}
+              />
+            </div>
+          </div>
+        </Nav.Link>
+      </Nav>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
   );
 }

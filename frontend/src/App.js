@@ -8,7 +8,7 @@ import {NavBarConnected,NavBarNotConnected} from "./component/Header/Header";
 function App() {
     return (
         <div className="App">
-            <NavBarConnected/>
+            <NavBarNotConnected/>
             <RoutesTree/>
             {/*<Footer/>*/}
         </div>
