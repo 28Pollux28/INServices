@@ -8,7 +8,7 @@ import Footer from './component/Footer/Footer';
 function App() {
     return (
         <div className="App">
-            <NavBarConnected/>
+            <NavBarNotConnected/>
             <RoutesTree/>
             <Footer/>
         </div>
