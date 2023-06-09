@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Table, Card } from 'react-bootstrap';
+import Profil_Picture from "../../profil_picture.svg"
 
 
 
@@ -23,18 +24,39 @@ export default function App() {
         <div style={{ width: '600px', margin: '0 auto' }}>
           <Container>
             <Row>
-              <Col xs={12} md={4} style={{ backgroundColor: '#ED3B3B', height: '443px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <div class="podium-number text-white display-1 font-weight-bold">
-                  <span>1</span>
-                </div>
-              </Col>
 
-              <Col xs={12} md={4} className="d-flex flex-column" style={{ height: '443px' }}>
-                <div className="top-half" style={{ flexGrow: 7 }}>
-                  <span>prénom</span>
-                </div>
-                <div className="bottom-half bg-warning" style={{ flexGrow: 3 }}></div>
-              </Col>
+                <Col xs={12} md={4} className="d-flex flex-column p-0" style={{ height: '443px' }}>
+                    <div className="d-flex flex-column align-items-center font-weight-bold justify-content-end" style={{ flexGrow: 6 }}>
+                        <img src={Profil_Picture} alt="Logo" className="img-fluid" />
+                        <span className='d-flex'><b>Baptiste P.</b></span>
+                        <span className='d-flex'>30 Karmas</span>
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center font-weight-bold text-white" style={{ flexGrow: 4, backgroundColor: '#FCC938' }}>
+                        <span className="display-4">2</span>
+                    </div>
+                </Col>
+
+                <Col xs={12} md={4} className="d-flex flex-column p-0" style={{ height: '443px'}}>
+                    <div className="d-flex flex-column align-items-center font-weight-bold justify-content-end" style={{ flexGrow: 3 }}>
+                        <img src={Profil_Picture} alt="Logo" className="img-fluid" />
+                        <span className='d-flex'><b>Valentin L.</b></span>
+                        <span className='d-flex'>100 Karmas</span>
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center font-weight-bold text-white" style={{ flexGrow: 7, backgroundColor: '#ED3B3B' }}>
+                        <span className="display-4">1</span>
+                    </div>
+                </Col>
+
+                <Col xs={12} md={4} className="d-flex flex-column p-0" style={{ height: '443px' }}>
+                    <div className="d-flex flex-column align-items-center font-weight-bold justify-content-end" style={{ flexGrow: 8 }}>
+                        <img src={Profil_Picture} alt="Logo" className="img-fluid" />
+                        <span className='d-flex'><b>Mody Sory S.</b></span>
+                        <span className='d-flex'>10 Karmas</span>
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center font-weight-bold text-white" style={{ flexGrow: 2, backgroundColor: '#2EB79C' }}>
+                        <span className="display-4">3</span>
+                    </div>
+                </Col>
 
             </Row>
           </Container>
