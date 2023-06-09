@@ -3,7 +3,7 @@ package database
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"inservice/models"
+	"inservices/models"
 )
 
 // Connect with postgres database

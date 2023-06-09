@@ -4,9 +4,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"gorm.io/gorm"
-	"inservice/handlers"
-	"inservice/models"
-	"inservice/utils"
+	"inservices/handlers"
+	"inservices/models"
+	"inservices/utils"
 	"time"
 )
 

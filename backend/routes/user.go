@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"inservice/handlers"
+	"inservices/handlers"
 )
 
 func UserRoutes(router fiber.Router, jwtMiddleware *fiber.Handler) {

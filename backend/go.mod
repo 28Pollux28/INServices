@@ -1,4 +1,4 @@
-module inservice
+module inservices
 
 go 1.19
 
