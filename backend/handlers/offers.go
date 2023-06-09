@@ -46,22 +46,9 @@ func validateOfferInput(input interface{}) []*ValidateErrorResponse {
 }
 
 func CreateOffer(c *fiber.Ctx) error {
-	uToken := c.Locals("user").(*jwt.Token)
-	claims, ok := uToken.Claims.(jwt.MapClaims)
+	db, user, err, ok := extractUserDB(c)
 	if !ok {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Internal server error",
-		})
-	}
-	id := uint(claims["id"].(float64))
-	db := c.Locals("db").(*gorm.DB)
-	// Check if user exists
-	var user models.User
-	res := db.First(&user, id)
-	if res.Error != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "User not found",
-		})
+		return err
 	}
 	// Parse form input
 	var input CreateOfferInput
@@ -115,23 +102,13 @@ func CreateOffer(c *fiber.Ctx) error {
 	})
 }
 
-type EditOfferInput struct {
-	Name        string       `json:"name" form:"name"`
-	Description string       `json:"description" form:"description"`
-	Price       uint         `json:"price" form:"price"`
-	Image       *image.Image `json:"image" form:"image"`
-	Status      string       `json:"status" form:"status"`
-	Visible     *bool        `json:"visible" form:"visible"` // pointer to bool because it's optional and it cause a problem with go bool default value
-}
-
-func EditOffer(c *fiber.Ctx) error {
-	// Get user id from JWT
+func extractUserDB(c *fiber.Ctx) (*gorm.DB, models.User, error, bool) {
 	uToken := c.Locals("user").(*jwt.Token)
 	claims, ok := uToken.Claims.(jwt.MapClaims)
 	if !ok {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		return nil, models.User{}, c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Internal server error",
-		})
+		}), false
 	}
 	id := uint(claims["id"].(float64))
 	db := c.Locals("db").(*gorm.DB)
@@ -139,9 +116,26 @@ func EditOffer(c *fiber.Ctx) error {
 	var user models.User
 	res := db.First(&user, id)
 	if res.Error != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+		return nil, models.User{}, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "User not found",
-		})
+		}), false
+	}
+	return db, user, nil, true
+}
+
+type EditOfferInput struct {
+	Name        string       `json:"name" form:"name"`
+	Description string       `json:"description" form:"description"`
+	Price       uint         `json:"price" form:"price"`
+	Image       *image.Image `json:"image" form:"image"`
+	Visible     *bool        `json:"visible" form:"visible"` // pointer to bool because it's optional and it cause a problem with go bool default value
+}
+
+func EditOffer(c *fiber.Ctx) error {
+	// Get user id from JWT
+	db, user, err, ok := extractUserDB(c)
+	if !ok {
+		return err
 	}
 	// Get offer id from url
 	offerID, err := c.ParamsInt("id")
@@ -152,7 +146,7 @@ func EditOffer(c *fiber.Ctx) error {
 	}
 	// Check if offer exists
 	var offer models.Offer
-	res = db.First(&offer, offerID)
+	res := db.First(&offer, offerID)
 	if res.Error != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": "Offer not found",
@@ -209,17 +203,6 @@ func EditOffer(c *fiber.Ctx) error {
 		// change image name in database
 		offer.Image = fname + ".png"
 	}
-	if input.Status != "" {
-		values := map[string]struct{}{"pending": {}, "accepted": {}, "rejected": {}}
-		// Check if status is in accepted, rejected, pending
-		if _, ok := values[input.Status]; ok {
-			offer.Status = input.Status
-		} else {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"error": "Invalid status",
-			})
-		}
-	}
 	if input.Visible != nil {
 		offer.Visible = *input.Visible
 	}
@@ -231,22 +214,9 @@ func EditOffer(c *fiber.Ctx) error {
 
 func DeleteOffer(c *fiber.Ctx) error {
 	// Get user id from JWT
-	uToken := c.Locals("user").(*jwt.Token)
-	claims, ok := uToken.Claims.(jwt.MapClaims)
+	db, user, err, ok := extractUserDB(c)
 	if !ok {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Internal server error",
-		})
-	}
-	id := uint(claims["id"].(float64))
-	db := c.Locals("db").(*gorm.DB)
-	// Check if user exists
-	var user models.User
-	res := db.First(&user, id)
-	if res.Error != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "User not found",
-		})
+		return err
 	}
 	// Get offer id from url
 	offerID, err := c.ParamsInt("id")
@@ -257,7 +227,7 @@ func DeleteOffer(c *fiber.Ctx) error {
 	}
 	// Check if offer exists
 	var offer models.Offer
-	res = db.First(&offer, offerID)
+	res := db.First(&offer, offerID)
 	if res.Error != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": "Offer not found",
@@ -280,6 +250,153 @@ func DeleteOffer(c *fiber.Ctx) error {
 	db.Delete(&offer)
 	return c.JSON(fiber.Map{
 		"message": "Offer deleted",
+	})
+}
+
+func AcceptOffer(c *fiber.Ctx) error {
+	db, user, err, ok := extractUserDB(c)
+	if !ok {
+		return err
+	}
+	// Get offer id from url
+	offerID, err := c.ParamsInt("id")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid offer id",
+		})
+	}
+	// Check if offer exists
+	var offer models.Offer
+	res := db.First(&offer, offerID)
+	if res.Error != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Offer not found",
+		})
+	}
+	// Check if offer doesn't belong to user
+	if offer.UserID == user.ID {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Cannot accept own offer",
+		})
+	}
+	// Check if offer is available
+	if offer.Status != "available" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Offer is not available",
+		})
+	}
+	// Check if offer is visible
+	if !offer.Visible {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Offer is not visible",
+		})
+	}
+	// Check if user has enough karmas
+	if user.Karmas < offer.Price {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Not enough Karmas",
+		})
+	}
+	// Set offer status to accepted
+	offer.Status = "accepted"
+	offer.AcceptedUserID = &user.ID
+	db.Save(&offer)
+	return c.JSON(fiber.Map{
+		"message": "Offer accepted",
+	})
+}
+
+func CancelOffer(c *fiber.Ctx) error {
+	// Get user id from JWT
+	db, user, err, ok := extractUserDB(c)
+	if !ok {
+		return err
+	}
+	// Get offer id from url
+	offerID, err := c.ParamsInt("id")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid offer id",
+		})
+	}
+	// Check if offer exists
+	var offer models.Offer
+	res := db.First(&offer, offerID)
+	if res.Error != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Offer not found",
+		})
+	}
+	// Check if offer was completed
+	if offer.Status == "completed" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Offer has already been completed",
+		})
+	}
+	// Check if offer has been accepted
+	if offer.Status != "accepted" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Offer has not been accepted",
+		})
+	}
+	// Check if offer has been accepted by user
+	if offer.AcceptedUserID != nil && *offer.AcceptedUserID != user.ID {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Offer has not been accepted by user",
+		})
+	}
+	// Set offer status to available
+	offer.Status = "available"
+	offer.AcceptedUserID = nil
+	db.Save(&offer)
+	return c.JSON(fiber.Map{
+		"message": "Offer canceled",
+	})
+}
+
+func CompleteOffer(c *fiber.Ctx) error {
+	// Get user id from JWT
+	db, user, err, ok := extractUserDB(c)
+	if !ok {
+		return err
+	}
+	// Get offer id from url
+	offerID, err := c.ParamsInt("id")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid offer id",
+		})
+	}
+	// Check if offer exists
+	var offer models.Offer
+	res := db.Preload("AcceptedUser").First(&offer, offerID)
+	if res.Error != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Offer not found",
+		})
+	}
+	// Check if offer belongs to user
+	if offer.UserID != user.ID {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Offer does not belong to user",
+		})
+	}
+	// Check if offer has been accepted
+	if offer.Status != "accepted" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Offer has not been accepted",
+		})
+	}
+	// Set offer status to completed
+	offer.Status = "completed"
+	// Transfer karmas
+	user.Karmas -= offer.Price
+	offer.AcceptedUser.Karmas += offer.Price
+	db.Save(&user)
+	db.Save(&offer.AcceptedUser)
+	db.Save(&offer)
+	return c.JSON(fiber.Map{
+		"message": "Offer completed",
 	})
 }
 
@@ -333,6 +450,26 @@ func GetPubOffersByUser(c *fiber.Ctx) error {
 	return c.JSON(publicOffers)
 }
 
+func GetPubOfferByID(c *fiber.Ctx) error {
+	db := c.Locals("db").(*gorm.DB)
+	// Get offer id from url
+	offerID, err := c.ParamsInt("id")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid offer id",
+		})
+	}
+	// Check if offer exists
+	var offer models.Offer
+	res := db.First(&offer, offerID)
+	if res.Error != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Offer not found",
+		})
+	}
+	return c.JSON(offer.Public())
+}
+
 func GetMyOffers(c *fiber.Ctx) error {
 	db := c.Locals("db").(*gorm.DB)
 	// Get user id from JWT
@@ -355,4 +492,40 @@ func GetMyOffers(c *fiber.Ctx) error {
 		})
 	}
 	return c.JSON(offers)
+}
+
+func GetMyOfferByID(c *fiber.Ctx) error {
+	db := c.Locals("db").(*gorm.DB)
+	// Get user id from JWT
+	uToken := c.Locals("user").(*jwt.Token)
+	claims, ok := uToken.Claims.(jwt.MapClaims)
+	if !ok {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Internal server error",
+		})
+	}
+	id := uint(claims["id"].(float64))
+	user := models.User{Base: models.Base{ID: id}}
+	// Get offer id from url
+	offerID, err := c.ParamsInt("id")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid offer id",
+		})
+	}
+	// Check if offer exists
+	var offer models.Offer
+	res := db.First(&offer, offerID)
+	if res.Error != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "Offer not found",
+		})
+	}
+	// Check if offer belongs to user
+	if offer.UserID != user.ID {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Offer does not belong to user",
+		})
+	}
+	return c.JSON(offer)
 }
