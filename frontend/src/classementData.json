@@ -1,0 +1,82 @@
+[
+    {
+        "UserID": "003",
+        "firstName": "Jean",
+        "lastName": "Tréhaut",
+        "nbrKarma": 83,
+        "position": 1
+    },
+
+    {
+        "UserID": "005",
+        "firstName": "Thomas",
+        "lastName": "Rousseau",
+        "nbrKarma": 50,
+        "position": 2
+    },
+
+    {
+        "UserID": "008",
+        "firstName": "Marie",
+        "lastName": "Girard",
+        "nbrKarma": 31,
+        "position": 3
+    },
+
+    {
+        "UserID": "004",
+        "firstName": "Sophie",
+        "lastName": "Lefèvre",
+        "nbrKarma": 25,
+        "position": 4
+    },
+
+    {
+        "UserID": "009",
+        "firstName": "Hugo",
+        "lastName": "Mercier",
+        "nbrKarma": 20,
+        "position": 5
+    },
+
+    {
+        "UserID": "006",
+        "firstName": "Alice",
+        "lastName": "Dubois",
+        "nbrKarma": 12,
+        "position": 6
+    },
+
+    {
+        "UserID": "010",
+        "firstName": "Camille",
+        "lastName": "Lecomte",
+        "nbrKarma": 15,
+        "position": 7
+    },
+
+    {
+      "UserID": "001",
+      "firstName": "Emma",
+      "lastName": "Dupont",
+      "nbrKarma": 10,
+      "position": 8
+    },
+
+    {
+      "UserID": "007",
+      "firstName": "Julien",
+      "lastName": "Leclerc",
+      "nbrKarma": 7,
+      "position": 9
+    },
+    {
+        "UserID": "002",
+        "firstName": "Lucas",
+        "lastName": "Martin",
+        "nbrKarma": 3,
+        "position": 10
+    }
+
+  ]
+  
