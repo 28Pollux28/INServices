@@ -3,16 +3,16 @@ package models
 // User model
 type User struct {
 	Base
-	Name          string `json:"name" gorm:"not null"`
-	Surname       string `json:"surname" gorm:"not null"`
-	Username      string `gorm:"unique" json:"username"`
-	Password      string `gorm:"not null" json:"password"`
-	Email         string `gorm:"unique" json:"email"`
-	Phone         string `gorm:"unique" json:"phone"`
-	EmailVerified bool   `gorm:"default:false" json:"email_verified"`
-	Karmas        int    `gorm:"default:20" json:"karmas"`
-	Avatar        string `json:"avatar" gorm:"default:default_avatar.png"`
-	Offers        []Offer
+	Name          string  `json:"name" gorm:"not null"`
+	Surname       string  `json:"surname" gorm:"not null"`
+	Username      string  `gorm:"unique" json:"username"`
+	Password      string  `gorm:"not null" json:"password"`
+	Email         string  `gorm:"unique" json:"email"`
+	Phone         string  `gorm:"unique" json:"phone"`
+	EmailVerified bool    `gorm:"default:false" json:"email_verified"`
+	Karmas        uint    `gorm:"default:20" json:"karmas"`
+	Avatar        string  `json:"avatar" gorm:"default:default_avatar.png"`
+	Offers        []Offer `gorm:"foreignkey:UserID"`
 	RefreshTokens []RefreshToken
 }
 
@@ -32,7 +32,7 @@ type PrivateUser struct {
 	Email         string `json:"email"`
 	Phone         string `json:"phone"`
 	EmailVerified bool   `json:"email_verified"`
-	Karmas        int    `json:"karmas"`
+	Karmas        uint   `json:"karmas"`
 	Avatar        string `json:"avatar"`
 }
 

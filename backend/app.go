@@ -5,10 +5,11 @@ import (
 	jwtware "github.com/gofiber/jwt/v2"
 	"github.com/joho/godotenv"
 	"github.com/mailjet/mailjet-apiv3-go"
-	"inservice/database"
-	"inservice/handlers"
-	"inservice/routes"
-	"inservice/utils"
+	"inservices/database"
+	"inservices/handlers"
+	"inservices/routes"
+	"inservices/utils"
+	"os"
 
 	"flag"
 	"log"
@@ -30,21 +31,34 @@ func main() {
 	if err != nil {
 		log.Println("Error loading .env file")
 	}
+	err = os.MkdirAll("uploads/users/50", 0755)
+	if err != nil && !os.IsExist(err) {
+		log.Fatal(err)
+	}
+	err = os.MkdirAll("uploads/users/200", 0755)
+	if err != nil && !os.IsExist(err) {
+		log.Fatal(err)
+	}
+	err = os.MkdirAll("uploads/offers/300", 0755)
+	if err != nil && !os.IsExist(err) {
+		log.Fatal(err)
+	}
 	// Connected with database
-	dbUrl := "host=" + utils.GetEnv("DB_HOST", "localhost") +
+	dbURL := "host=" + utils.GetEnv("DB_HOST", "localhost") +
 		" user=" + utils.GetEnv("DB_USER", "inservices") +
 		" password=" + utils.GetEnv("DB_PASSWORD", "inservices") +
 		" dbname=" + utils.GetEnv("DB_NAME", "inservices") +
 		" port=" + utils.GetEnv("DB_PORT", "5432") +
 		" sslmode=disable TimeZone=Europe/Paris"
-	db, err := database.Connect(dbUrl)
+	db, err := database.Connect(dbURL)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Create fiber app
 	app := fiber.New(fiber.Config{
-		Prefork: *prod, // go run app.go -prod
+		Prefork:   *prod, // go run app.go -prod
+		BodyLimit: 20 * 1024 * 1024,
 	})
 	mailjetClient := mailjet.NewMailjetClient(utils.GetEnv("MAILJET_API_KEY", "azertyuiopmlkjhgfdsq"), utils.GetEnv("MAILJET_API_SECRET", "azertyuiopmlkjhgfdsq123"))
 
@@ -66,13 +80,15 @@ func main() {
 	jwtMiddleware := jwtware.New(jwtware.Config{
 		SigningKey: []byte("secret"),
 	})
-	//v1.Post("/refresh", jwtMiddleware, handlers.Refresh)
+	// v1.Post("/refresh", jwtMiddleware, handlers.Refresh)
 	// Bind handlers
 	routes.UserRoutes(v1, &jwtMiddleware)
 	routes.AuthRoutes(v1)
+	routes.OffersRoutes(v1, &jwtMiddleware)
 
 	// Setup static files
 	app.Static("/", "./static/public")
+	app.Static("/assets/", "./uploads")
 
 	// Handle not founds
 	app.Use(handlers.NotFound)

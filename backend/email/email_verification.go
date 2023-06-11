@@ -3,7 +3,7 @@ package email
 import (
 	"github.com/flosch/pongo2/v6"
 	"github.com/mailjet/mailjet-apiv3-go"
-	"inservice/models"
+	"inservices/models"
 	"log"
 )
 

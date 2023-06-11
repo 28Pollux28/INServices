@@ -14,16 +14,14 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o app 
 
 
 # Moving the binary to the 'final Image' to make it smaller
-FROM alpine:latest as release
+FROM alpine:3.18.0 as release
 
 WORKDIR /app
 
 # Create the `public` dir and copy all the assets into it
 RUN mkdir ./static
-RUN mkdir ./uploads; exit 0
-RUN mkdir ./uploads/users; exit 0
-RUN mkdir ./uploads/users/50
-RUN mkdir ./uploads/users/200
+RUN mkdir ./uploads
+
 COPY ./static ./static
 COPY ./default_avatar200.png ./uploads/users/200/default_avatar200.png
 COPY ./default_avatar50.png ./uploads/users/50/default_avatar50.png

@@ -1,17 +1,13 @@
 package handlers
 
 import (
-	"bytes"
 	"github.com/disintegration/imaging"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"inservice/models"
-	"io"
+	"inservices/models"
+	"inservices/utils"
 	"log"
-	"mime/multipart"
-	"net/http"
 	"os"
 	"strconv"
 )
@@ -45,59 +41,6 @@ func UploadUserAvatar(c *fiber.Ctx) error {
 	}
 	id := claims["id"].(float64)
 	db := c.Locals("db").(*gorm.DB)
-	file, err := c.FormFile("avatar")
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid file",
-		})
-	}
-	// check file size
-	if file.Size > 1024*1024*5 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "File too big",
-		})
-	}
-
-	uuidS, err := uuid.NewRandom()
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Internal server error2",
-			"err":   err.Error(),
-		})
-	}
-	fName := uuidS.String()
-
-	// check if file is an image
-	open, err := file.Open()
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid file",
-		})
-	}
-	defer func(open multipart.File) {
-		err := open.Close()
-		if err != nil {
-			log.Println(err)
-		}
-	}(open)
-	buff := make([]byte, 512) // docs tell that it take only first 512 bytes into consideration
-	if _, err = open.Read(buff); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid file",
-		})
-	}
-	_, err = open.Seek(0, io.SeekStart)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Internal server error3",
-		})
-	}
-	contentType := http.DetectContentType(buff)
-	if contentType != "image/jpeg" && contentType != "image/png" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid file",
-		})
-	}
 	var user models.User
 	res := db.First(&user, id)
 	if res.Error != nil {
@@ -105,24 +48,16 @@ func UploadUserAvatar(c *fiber.Ctx) error {
 			"error": "User not found",
 		})
 	}
-	// resize image
-	buffer, err := io.ReadAll(open)
+	fName, img, err := utils.ExtractImageFromForm(c, "avatar", 1024*1024*5)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Internal server error4",
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid image",
+			"err":   err.Error(),
 		})
 	}
 
-	// resize image
-	img, err := imaging.Decode(bytes.NewReader(buffer))
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Internal server error5",
-		})
-	}
-
-	img50 := imaging.Fill(img, 50, 50, imaging.Center, imaging.Lanczos)
-	img200 := imaging.Fill(img, 200, 200, imaging.Center, imaging.Lanczos)
+	img50 := imaging.Fill(*img, 50, 50, imaging.Center, imaging.Lanczos)
+	img200 := imaging.Fill(*img, 200, 200, imaging.Center, imaging.Lanczos)
 	err = imaging.Save(img50, "uploads/users/50/"+fName+".png")
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
