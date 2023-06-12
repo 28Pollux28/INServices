@@ -24,6 +24,12 @@ type PublicUser struct {
 	Avatar   string `json:"avatar"`
 }
 
+type RankUser struct {
+	PublicUser
+	Karmas uint `json:"karmas"`
+	Rank   int  `json:"rank"`
+}
+
 // Private user struct
 type PrivateUser struct {
 	Name          string `json:"name"`
@@ -55,5 +61,13 @@ func (u *User) Private() *PrivateUser {
 		EmailVerified: u.EmailVerified,
 		Karmas:        u.Karmas,
 		Avatar:        u.Avatar,
+	}
+}
+
+func (u *User) Rank(rank int) *RankUser {
+	return &RankUser{
+		PublicUser: *u.Public(),
+		Karmas:     u.Karmas,
+		Rank:       rank,
 	}
 }
