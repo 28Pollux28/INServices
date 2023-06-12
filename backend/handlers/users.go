@@ -94,3 +94,64 @@ func UploadUserAvatar(c *fiber.Ctx) error {
 		"avatar": fName + ".png",
 	})
 }
+
+// GetPubRanking returns the ranking of users based on the karmas they have
+func GetPubRanking(c *fiber.Ctx) error {
+	db := c.Locals("db").(*gorm.DB)
+	var users []models.User
+	// we need to get the 10 users with the highest karma
+	res := db.Order("karmas desc").Limit(10).Find(&users)
+	if res.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Internal server error",
+		})
+	}
+	// we need to return the rank version of the users by mapping them
+	rankUsers := make([]models.RankUser, 0, len(users))
+	for i, user := range users {
+		rankUsers = append(rankUsers, *user.Rank(i + 1))
+	}
+	return c.JSON(rankUsers)
+}
+
+func GetPrivRanking(c *fiber.Ctx) error {
+	db := c.Locals("db").(*gorm.DB)
+	// Get user id from JWT
+	uToken := c.Locals("user").(*jwt.Token)
+	claims, ok := uToken.Claims.(jwt.MapClaims)
+	if !ok {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Internal server error",
+		})
+	}
+	id := uint(claims["id"].(float64))
+	var me models.User
+	res := db.First(&me, id)
+	if res.Error != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": "User not found",
+		})
+	}
+	var users []models.User
+	// we need to get the ranking of the user and the 10 best users
+	res = db.Order("karmas desc").Limit(10).Find(&users)
+	if res.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Internal server error",
+		})
+	}
+	var rank int
+	res2 := db.Raw("select rank from (select t.*, rank() over (order by karmas desc) as rank from users t) t where t.id = ?", id).Scan(&rank)
+	if res2.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Internal server error",
+		})
+	}
+	// we need to return the rank of the user and the 10 best users
+	rankUsers := make([]models.RankUser, 0, len(users)+1)
+	rankUsers = append(rankUsers, *me.Rank(rank))
+	for i, user := range users {
+		rankUsers = append(rankUsers, *user.Rank(i + 1))
+	}
+	return c.JSON(rankUsers)
+}
