@@ -26,6 +26,7 @@ services:
       - DB_USER=inservices
       - DB_PASSWORD=inservices
       - DB_NAME=inservices
+      - DB_DRIVER=postgres
       - JWT_SECRET=secret
     ports: 
       - "3000:3000"
