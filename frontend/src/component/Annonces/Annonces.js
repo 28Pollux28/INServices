@@ -4,6 +4,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+//"get offers/public/latest"
+
 const Annonces = ({ annonces }) => {
     return (
         <Container>

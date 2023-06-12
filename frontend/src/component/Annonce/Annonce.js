@@ -7,7 +7,7 @@ import KarmaCoin from '../../karmaCoin.svg';
 import Container from 'react-bootstrap/esm/Container';
 import './Annonce.css';
 
-const Annonce = ({ annonce }) => {
+const Annonce = ({ annonce, previewPage = false }) => {
 
     const truncateText = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -22,7 +22,6 @@ const Annonce = ({ annonce }) => {
         }
         return text;
     }
-
     return (
         <Card className="text-start" >
             <Card.Body className="d-flex flex-column">
@@ -38,10 +37,12 @@ const Annonce = ({ annonce }) => {
                     <a href='#' className="link-dark linkStyle"><Card.Title className='fw-semibold'>{truncateTitle(annonce.titreAnnonce, 42)}</Card.Title></a>
                 </div>
                 <div>
-                    <Card.Img variant="top" src={annonce.imageAnnonce} />
-                    <div>
-                        {truncateText(annonce.descriptionAnnonce, 85)}
+                    <div className="square-image-container">
+                        <Card.Img variant="top" src={annonce.imageAnnonce} className="square-image" />
                     </div>
+                    <Card.Text>
+                        {truncateText(annonce.descriptionAnnonce, 85)}
+                    </Card.Text>
 
                     <div className="mt-auto">
                         <div className="d-flex m-0">
@@ -60,7 +61,10 @@ const Annonce = ({ annonce }) => {
 
                         </div>
 
-                        <Button variant="primary" className="d-flex m-auto mt-1">Contacter</Button>
+                        <div>
+                            {!previewPage && <Button variant="primary" className="d-flex m-auto mt-1">Contacter</Button>}
+                        </div>
+
                     </div>
                 </div>
             </Card.Body>

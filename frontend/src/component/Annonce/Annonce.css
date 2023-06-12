@@ -8,5 +8,23 @@ div.imageKarmaCoin{
     width: 10%
 }
 
-
+.square-image-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* Crée un espace réservé carré basé sur la largeur */
+    overflow: hidden;
+  }
+  
+  .square-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: 100%;
+    min-width: 100%; /* Zoom pour remplir la largeur */
+    object-fit: cover; /* Remplit l'espace carré en coupant l'image */
+  }
+  
+  
 

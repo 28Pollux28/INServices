@@ -10,6 +10,7 @@ import Logout from "./view/Logout/Logout";
 import Classement from "./view/Classement/Classement"
 import ProtectedRoute from "./component/ProtectedRoute/ProtectedRoute";
 import MesDemandes from "./view/MesDemandes/MesDemandes";
+import CreateAnnoncePage from "./view/CreateAnnonce/CreateAnnoncePage";
 
 const RoutesTree = () => {
     return (
