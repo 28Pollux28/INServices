@@ -16,7 +16,7 @@ export default function App() {
       </Row>
       <Row>
         <div >
-        <p><br/>Vous êtes classé : {data[4].position}ème</p>
+        <p><br/>Vous êtes classé : {data[0].rank}ème</p>
         </div>
       </Row>
       <Row>
@@ -26,9 +26,9 @@ export default function App() {
 
                 <Col xs={12} md={4} className="d-flex flex-column p-0" style={{ height: '443px' }}>
                     <div className="d-flex flex-column align-items-center font-weight-bold justify-content-end" style={{ flexGrow: 6 }}>
-                        <img src={Profil_Picture} alt="Logo" className="img-fluid" />
-                        <span className='d-flex'><b>{data[1].firstName}{data[1].lastName[0]}.</b></span>
-                        <span className='d-flex'>{data[1].nbrKarma} Karmas</span>
+                        <img src={data[2].avatar} alt="Logo" className="img-fluid" />
+                        <span className='d-flex'><b>{data[2].name}{data[2].surname[0]}.</b></span>
+                        <span className='d-flex'>{data[2].karmas} Karmas</span>
                     </div>
                     <div className="d-flex align-items-center justify-content-center font-weight-bold text-white" style={{ flexGrow: 4, backgroundColor: '#FCC938' }}>
                         <span className="display-4">2</span>
@@ -38,8 +38,8 @@ export default function App() {
                 <Col xs={12} md={4} className="d-flex flex-column p-0" style={{ height: '443px'}}>
                     <div className="d-flex flex-column align-items-center font-weight-bold justify-content-end" style={{ flexGrow: 3 }}>
                         <img src={Profil_Picture} alt="Logo" className="img-fluid" />
-                        <span className='d-flex'><b>{data[0].firstName}{data[0].lastName[0]}.</b></span>
-                        <span className='d-flex'>{data[0].nbrKarma} Karmas</span>
+                        <span className='d-flex'><b>{data[1].name}{data[1].surname[0]}.</b></span>
+                        <span className='d-flex'>{data[1].karmas} Karmas</span>
                     </div>
                     <div className="d-flex align-items-center justify-content-center font-weight-bold text-white" style={{ flexGrow: 7, backgroundColor: '#ED3B3B' }}>
                         <span className="display-4">1</span>
@@ -49,8 +49,8 @@ export default function App() {
                 <Col xs={12} md={4} className="d-flex flex-column p-0" >
                     <div className="d-flex flex-column align-items-center font-weight-bold justify-content-end" style={{ flexGrow: 8 }}>
                         <img src={Profil_Picture} alt="Logo" className="img-fluid" />
-                        <span className='d-flex'><b>{data[2].firstName}{data[2].lastName[0]}.</b></span>
-                        <span className='d-flex'>{data[2].nbrKarma} Karmas</span>
+                        <span className='d-flex'><b>{data[3].name}{data[3].surname[0]}.</b></span>
+                        <span className='d-flex'>{data[3].karmas} Karmas</span>
                     </div>
                     <div className="d-flex align-items-center justify-content-center font-weight-bold text-white" style={{ flexGrow: 2, backgroundColor: '#2EB79C' }}>
                         <span className="display-4">3</span>
@@ -77,11 +77,11 @@ export default function App() {
             <td><b>Utilisateur</b></td>
             <td><b>Nombre de Karma</b></td>
           </tr>
-          {data.map((item, index) => (
+          {data.slice(1).map((item, index) => (
             <tr key={index}>
-              <td>{item.position}</td>
-              <td>{item.firstName} {item.lastName}</td>
-              <td>{item.nbrKarma}</td>
+              <td>{item.rank}</td>
+              <td>{item.name} {item.surname}</td>
+              <td>{item.karmas}</td>
             </tr>
           ))}
         </tbody>
