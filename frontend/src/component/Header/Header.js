@@ -2,7 +2,7 @@ import React from "react";
 import logo from "./img/logo.svg";
 import coin from "./img/coin.svg"
 import pp from "./img/pp.jpg";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar,Button } from "react-bootstrap";
 import "./Header.css";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -46,7 +46,7 @@ export function NavBarNotConnected() {
             <Nav.Link className="connect" href="link">
               Se connecter
             </Nav.Link>
-            <Nav.Link className="bg-primary rounded-pill" href="link">
+            <Nav.Link className="bg-#4C97C0 rounded-pill" href="link">
               S'inscrire
             </Nav.Link>
           </Nav>
@@ -121,3 +121,17 @@ export function NavBarConnected() {
 </Navbar>
   );
 }
+
+export function ConditionalFunction() {
+
+  
+  const user = user.get();
+
+  
+  return (
+    
+      user ? <NavBarConnected /> : <NavBarNotConnected />
+    
+  );
+}
+
