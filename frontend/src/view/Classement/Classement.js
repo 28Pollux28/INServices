@@ -1,11 +1,10 @@
 import React from 'react';
-import { Container, Row, Col, Table, Card } from 'react-bootstrap';
+import { Container, Row, Col, Table } from 'react-bootstrap';
 import Profil_Picture from "../../profil_picture.svg"
 import classementData from '../../classementData.json';
 
 
-
-export default function App() {
+export default function Classement() {
   const data = classementData;
   return (
     <Container>
@@ -16,7 +15,7 @@ export default function App() {
       </Row>
       <Row>
         <div >
-        <p><br/>Vous êtes classé : {data[0].rank}ème</p>
+        <p><br/>Vous êtes classé : {data[0].rank === 1 ? '1er' : `${data[0].rank}ème`}</p>
         </div>
       </Row>
       <Row>
@@ -26,9 +25,9 @@ export default function App() {
 
                 <Col xs={12} md={4} className="d-flex flex-column p-0" style={{ height: '443px' }}>
                     <div className="d-flex flex-column align-items-center font-weight-bold justify-content-end" style={{ flexGrow: 6 }}>
-                        <img src={data[2].avatar} alt="Logo" className="img-fluid" />
-                        <span className='d-flex'><b>{data[2].name}{data[2].surname[0]}.</b></span>
-                        <span className='d-flex'>{data[2].karmas} Karmas</span>
+                      <img src={Profil_Picture} alt="Logo" className="img-fluid" />
+                      <span className='d-flex'><b>{data[2].name}{data[2].surname[0]}.</b></span>
+                      <span className='d-flex'>{data[2].karmas} Karmas</span>
                     </div>
                     <div className="d-flex align-items-center justify-content-center font-weight-bold text-white" style={{ flexGrow: 4, backgroundColor: '#FCC938' }}>
                         <span className="display-4">2</span>
@@ -37,9 +36,9 @@ export default function App() {
 
                 <Col xs={12} md={4} className="d-flex flex-column p-0" style={{ height: '443px'}}>
                     <div className="d-flex flex-column align-items-center font-weight-bold justify-content-end" style={{ flexGrow: 3 }}>
-                        <img src={Profil_Picture} alt="Logo" className="img-fluid" />
-                        <span className='d-flex'><b>{data[1].name}{data[1].surname[0]}.</b></span>
-                        <span className='d-flex'>{data[1].karmas} Karmas</span>
+                      <img src={Profil_Picture} alt="Logo" className="img-fluid" />
+                      <span className='d-flex'><b>{data[1].name}{data[1].surname[0]}.</b></span>
+                      <span className='d-flex'>{data[1].karmas} Karmas</span>
                     </div>
                     <div className="d-flex align-items-center justify-content-center font-weight-bold text-white" style={{ flexGrow: 7, backgroundColor: '#ED3B3B' }}>
                         <span className="display-4">1</span>
