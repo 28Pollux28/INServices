@@ -1,7 +1,7 @@
 import React from 'react';
 import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-kit';
 import Logo_INSA_Lyon from "../../Logo_INSA_Lyon.svg"
-import Logo_INService from "../../Logo_INService.svg"
+import Logo_INService from "../../Logo_INServices.svg"
 
 
 
@@ -21,7 +21,7 @@ export default function App() {
               </h6>
               <p>
                 <a style={{ color: 'white' }}>
-                INService est un simple projet permettant de mettre en relation des étudiants issu d’un même campus afin de facilier les échange de service
+                INServices est un site web permettant de mettre en relation des étudiants issu d’un même campus afin de faciliter les échanges de services
                 </a>
               </p>
             </MDBCol>
@@ -88,7 +88,7 @@ export default function App() {
               <h6 className='text-uppercase fw-bold mb-4' style={{ color: 'white' }}>Contact</h6>
               <p>
                 <MDBIcon icon="envelope" className="m-0" />
-                <a style={{ color: 'white', textDecoration: 'none' }} href="mailto:contact@INService.com">contact@INService.com</a>
+                <a style={{ color: 'white', textDecoration: 'none' }} href="mailto:contact@inservices.com">contact@inservices.com</a>
               </p>
               <div className="mt-auto" >
                 <img src={Logo_INSA_Lyon} alt="Logo" className="img-fluid" />
