@@ -59,7 +59,7 @@ func Refresh(c *fiber.Ctx) error {
 			"error": "invalid refresh token",
 		})
 	}
-	t, rt, err := createToken(c, user)
+	t, rt, err := createToken(user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err,
@@ -67,6 +67,17 @@ func Refresh(c *fiber.Ctx) error {
 	}
 	// delete old refresh token
 	db.Delete(&rToken)
+	// save new refresh token
+	newRt := models.RefreshToken{
+		Token:  rt,
+		UserId: user.ID,
+	}
+	res2 := db.Create(&newRt)
+	if res2.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": res2.Error,
+		})
+	}
 
 	return c.JSON(fiber.Map{"access": t, "refresh": rt})
 }
@@ -101,7 +112,7 @@ func ValidateRegisterUser(user RegisterUser) []*ValidateErrorResponse {
 			errors = append(errors, &element)
 		}
 	}
-	//Check for password confirmation
+	// Check for password confirmation
 	if user.Password != user.PasswordConfirmation {
 		errors = append(errors, &ValidateErrorResponse{
 			FailedField: "password_confirmation",
@@ -109,7 +120,7 @@ func ValidateRegisterUser(user RegisterUser) []*ValidateErrorResponse {
 			Value:       "password",
 		})
 	}
-	//check for password strength
+	// check for password strength
 	isNumber, isUpper, isLower, isSpecial := utils.CheckPasswordStrength(user.Password)
 	if !isNumber || !isUpper || !isLower || !isSpecial {
 		errors = append(errors, &ValidateErrorResponse{
@@ -153,7 +164,8 @@ func Register(c *fiber.Ctx) error {
 	res := db.Create(&user)
 	if res.Error != nil {
 		// Check if email is already taken
-		if strings.Contains(res.Error.Error(), "users_email_unique") {
+		switch {
+		case strings.Contains(res.Error.Error(), "users_email_unique"):
 			return c.Status(fiber.StatusConflict).JSON(
 				&ValidateErrorResponse{
 					FailedField: "email",
@@ -161,26 +173,25 @@ func Register(c *fiber.Ctx) error {
 					Value:       "email",
 				},
 			)
-		} else if strings.Contains(res.Error.Error(), "users_username_unique") {
+		case strings.Contains(res.Error.Error(), "users_username_unique"):
 			return c.Status(fiber.StatusConflict).JSON(
 				&ValidateErrorResponse{
 					FailedField: "username",
 					Tag:         "unique",
 					Value:       "username",
 				})
-		} else if strings.Contains(res.Error.Error(), "users_phone_unique") {
+		case strings.Contains(res.Error.Error(), "users_phone_unique"):
 			return c.Status(fiber.StatusConflict).JSON(
 				&ValidateErrorResponse{
 					FailedField: "phone",
 					Tag:         "unique",
 					Value:       "phone",
 				})
-		} else {
+		default:
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"error": res.Error,
 			})
 		}
-
 	}
 	// Send verification email
 	client := c.Locals("mailjet").(*mailjet.Client)
@@ -202,7 +213,7 @@ func Register(c *fiber.Ctx) error {
 			"error": err,
 		})
 	}
-	newToken, refreshToken, err := createToken(c, user)
+	newToken, refreshToken, err := createToken(user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err,
@@ -237,20 +248,20 @@ func Login(c *fiber.Ctx) error {
 	var user models.User
 	res := db.Where("email = ?", emailAdrr).First(&user)
 	if res.Error != nil {
-		//Return Unauthorized if user not found
+		// Return Unauthorized if user not found
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "invalid credentials",
 		})
 	}
 	// Check hashed password
 	if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pass)) != nil {
-		//Return Unauthorized if password is incorrect
+		// Return Unauthorized if password is incorrect
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "invalid credentials",
 		})
 	}
 
-	t, rt, err := createToken(c, user)
+	t, rt, err := createToken(user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err,
@@ -310,7 +321,7 @@ func VerifyEmail(c *fiber.Ctx) error {
 		})
 	}
 	// Create new token
-	newToken, refreshToken, err := createToken(c, user)
+	newToken, refreshToken, err := createToken(user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err,
@@ -320,10 +331,9 @@ func VerifyEmail(c *fiber.Ctx) error {
 		"access":  newToken,
 		"refresh": refreshToken,
 	})
-
 }
 
-func createToken(c *fiber.Ctx, user models.User) (string, string, error) {
+func createToken(user models.User) (string, string, error) {
 	// Create token
 	token := jwt.New(jwt.SigningMethodHS256)
 	// Set claims
@@ -351,16 +361,5 @@ func createToken(c *fiber.Ctx, user models.User) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	// Save refresh token in database
-	db := c.Locals("db").(*gorm.DB)
-	refreshTokenObj := models.RefreshToken{
-		Token:  rT,
-		UserId: user.ID,
-	}
-	res := db.Create(&refreshTokenObj)
-	if res.Error != nil {
-		return "", "", res.Error
-	}
-
 	return t, rT, nil
 }

@@ -5,7 +5,7 @@ import {Navigate, useNavigate} from 'react-router-dom';
 import {Alert, Card, Col, Container, Form, Row, ThemeProvider} from "react-bootstrap";
 
 //Construct a login page with Bootstrap React
-const Login = () => {
+const Register = () => {
     useEffect(() => {
         document.title = 'Register';
     }, []);
@@ -148,4 +148,4 @@ const Login = () => {
 
 }
 
-export default Login;
+export default Register;

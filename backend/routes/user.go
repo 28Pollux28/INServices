@@ -13,4 +13,5 @@ func UserRoutes(router fiber.Router, jwtMiddleware *fiber.Handler) {
 	restricted := user.Group("/restricted", *jwtMiddleware)
 	restricted.Post("/avatar", handlers.UploadUserAvatar)
 	restricted.Get("/rankings", handlers.GetPrivRanking)
+	restricted.Get("/me", handlers.GetPrivUser)
 }

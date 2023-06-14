@@ -13,7 +13,7 @@ const Intro = () => {
     };
 
     return (
-        <Row className="align-items-center">
+        <Row className="align-items-center w-100">
             <Col md={6} >
                 <div className='mx-2'>
                     <h1>{headerContent.title}</h1>

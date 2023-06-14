@@ -43,6 +43,15 @@ func main() {
 	if err != nil && !os.IsExist(err) {
 		log.Fatal(err)
 	}
+	// copy default_avatar50.png to uploads/users/50/default_avatar50.png
+	err = utils.CopyFile("static/assets/default_avatar50.png", "uploads/users/50/default_avatar.png")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = utils.CopyFile("static/assets/default_avatar200.png", "uploads/users/200/default_avatar.png")
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Connected with database
 	dbURL := "host=" + utils.GetEnv("DB_HOST", "localhost") +
 		" user=" + utils.GetEnv("DB_USER", "inservices") +
@@ -72,7 +81,7 @@ func main() {
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*, http://localhost",
-		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
 	// Create a /api/v1 endpoint
