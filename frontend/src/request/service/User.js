@@ -1,4 +1,4 @@
-import {publicClient as client} from "../client";
+import {privateClient, publicClient as client} from "../client";
 import jwt from "jwt-decode";
 
 export default {
@@ -62,6 +62,15 @@ export default {
         return null;
     },
 
+    getMe: async () => {
+        try {
+            const response = await privateClient.get('user/restricted/me');
+            return response.data;
+        } catch (error) {
+            return null;
+        }
+    },
+
     getToken: () => {
         const token = JSON.parse(localStorage.getItem('token'));
 
@@ -79,11 +88,8 @@ export default {
             return token.refresh;
     },
 
-    updateToken: (accessToken) => {
-        const token = JSON.parse(localStorage.getItem("token"));
-
+    updateToken: (token) => {
         if (token && token.access) {
-            token.access = accessToken;
             localStorage.setItem("token", JSON.stringify(token));
         }
     }

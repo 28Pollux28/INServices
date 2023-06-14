@@ -95,6 +95,26 @@ func UploadUserAvatar(c *fiber.Ctx) error {
 	})
 }
 
+func GetPrivUser(c *fiber.Ctx) error {
+	token := c.Locals("user").(*jwt.Token)
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Internal server error1",
+		})
+	}
+	id := claims["id"].(float64)
+	db := c.Locals("db").(*gorm.DB)
+	var user models.User
+	res := db.First(&user, id)
+	if res.Error != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "User not found",
+		})
+	}
+	return c.JSON(user.Private())
+}
+
 // GetPubRanking returns the ranking of users based on the karmas they have
 func GetPubRanking(c *fiber.Ctx) error {
 	db := c.Locals("db").(*gorm.DB)

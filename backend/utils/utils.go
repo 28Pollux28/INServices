@@ -92,3 +92,33 @@ func ExtractImageFromForm(c *fiber.Ctx, formField string, size int64) (string, *
 	}
 	return fName, &img, nil
 }
+
+func CopyFile(originPath string, dest string) error {
+	origin, err := os.Open(originPath)
+	if err != nil {
+		return err
+	}
+	defer func(origin *os.File) {
+		err := origin.Close()
+		if err != nil {
+			log.Println(err)
+		}
+	}(origin)
+
+	destination, err := os.Create(dest)
+	if err != nil {
+		return err
+	}
+	defer func(destination *os.File) {
+		err := destination.Close()
+		if err != nil {
+			log.Println(err)
+		}
+	}(destination)
+
+	_, err = io.Copy(destination, origin)
+	if err != nil {
+		return err
+	}
+	return nil
+}
