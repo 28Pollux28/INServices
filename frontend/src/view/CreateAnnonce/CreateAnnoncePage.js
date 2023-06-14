@@ -6,7 +6,7 @@ import CreateAnnonce from "../../component/CreateAnnonce/CreateAnnonce";
 
 
 
-const Home = () => {
+const CreateAnnoncePage = () => {
 
     return (
         <>
@@ -17,4 +17,4 @@ const Home = () => {
     );
 }
 
-export default Home;
+export default CreateAnnoncePage;

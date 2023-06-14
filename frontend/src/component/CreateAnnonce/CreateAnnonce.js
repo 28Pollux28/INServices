@@ -4,41 +4,38 @@ import Annonce from '../Annonce/Annonce';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import User from "../../request/service/User";
+import Offer from "../../request/service/Offer";
+
 import { Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import defaultImageAnnonce from '../../defaultImageAnnonce.png';
 
-//RECUPERER LES DONNEES DE L'UTILISATEUR
-// Son image de profil
-// Son prénom
-// Son nom
-
-console.log(User.get());
 const data_user = User.get()
 
 const CreerAnnonce = () => {
     const [formState, setFormState] = useState({
-        firstName: "",
-        lastName: "",
-        photoProfil: "https://picsum.photos/50/50",
-        titreAnnonce: "Titre de l'annonce",
-        descriptionAnnonce: "Description de l'annonce",
-        recompence: "XX",
-        imageAnnonce: defaultImageAnnonce,
+        user_name: "Prénom",
+        user_surname: "Parpette",
+        user_image: "https://picsum.photos/50/50",
+        name: "Titre de l'annonce",
+        description: "Description de l'annonce",
+        price: "XX",
+        image: defaultImageAnnonce,
         visible: true,
         status: "available"
     });
 
+
     useEffect(() => {
         if (data_user) {
             setFormState({
-                firstName: data_user['surname'],
-                lastName: data_user['name'],
-                photoProfil: "https://picsum.photos/50/50",
-                titreAnnonce: "Titre de l'annonce",
-                descriptionAnnonce: "Description de l'annonce",
-                recompence: "XX",
-                imageAnnonce: defaultImageAnnonce,
+                user_name: data_user['name'],
+                user_surname: data_user['surname'],
+                user_image: "https://picsum.photos/50/50",
+                name: "Titre de l'annonce" ,
+                description: "Description de l'annonce",
+                price: "XX",
+                image: defaultImageAnnonce,
                 visible: true,
                 status: "available"
             });
@@ -72,7 +69,7 @@ const CreerAnnonce = () => {
         reader.onloadend = () => {
             setFormState({
                 ...formState,
-                imageAnnonce: reader.result,
+                image: reader.result,
             });
         };
 
@@ -81,10 +78,19 @@ const CreerAnnonce = () => {
         } else {
             setFormState({
                 ...formState,
-                imageAnnonce: "",
+                image: "",
             });
         }
     };
+
+
+    const handleSubmit = () => {
+        // Votre programme JavaScript à exécuter lors du clic sur le bouton Submit
+        console.log('Le bouton Submit a été cliqué !');
+        Offer.add(formState)
+
+        // Vous pouvez ajouter votre code ici pour effectuer une action spécifique
+      };
 
     return (
         //<div className="d-flex justify-content-between">
@@ -96,7 +102,7 @@ const CreerAnnonce = () => {
                         <Form.Label>Titre</Form.Label>
                         <Form.Control
                             type="text"
-                            name="titreAnnonce"
+                            name="name"
                             onChange={handleInputChange}
                         />
                     </Form.Group>
@@ -114,7 +120,7 @@ const CreerAnnonce = () => {
                         <Form.Label>Description</Form.Label>
                         <Form.Control
                             type="text"
-                            name="descriptionAnnonce"
+                            name="description"
                             onChange={handleInputChange}
                         />
                     </Form.Group>
@@ -123,15 +129,17 @@ const CreerAnnonce = () => {
                         <Form.Label>Récompence</Form.Label>
                         <Form.Control
                             type="text"
-                            name="recompence"
+                            name="price"
                             onChange={handleInputChange}
                         />
                     </Form.Group>
 
                 </Form>
-                <Button variant="primary" className="d-flex m-auto mt-3" type="submit">
+
+                <Button variant="primary" className="d-flex m-auto mt-3" type="submit" onClick={handleSubmit}>
                     Submit
                 </Button>
+
             </Col>
             <Col sm={5} md={5} lg={4} className="m-4 d-flex flex-column">
                 <span className='fw-semibold p-2 align-self-start'>Aperçu:</span>
