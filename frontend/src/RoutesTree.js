@@ -7,6 +7,7 @@ import Login from "./view/Login/Login";
 import Register from "./view/Register/Register";
 import VerifyEmail from "./view/VerifyEmail/VerifyEmail";
 import Logout from "./view/Logout/Logout";
+import Classement from "./view/Classement/Classement"
 
 const RoutesTree = () => {
     return (
@@ -17,6 +18,7 @@ const RoutesTree = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/verify/:token" element={<VerifyEmail />} />
             <Route path="/logout" element={<Logout />} />
+            <Route path="/classement" element={<Classement />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

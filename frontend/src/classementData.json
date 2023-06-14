@@ -1,0 +1,81 @@
+[
+    {
+        "name": "Moi",
+        "surname": "Moi",
+        "avatar": "../../profil_picture.svg",
+        "karmas": 83,
+        "rank": 24
+    },
+    {
+        "name": "Jean",
+        "surname": "Tréhaut",
+        "avatar": "../../profil_picture.svg",
+        "karmas": 83,
+        "rank": 1
+    },
+
+    {
+        "name": "Thomas",
+        "surname": "Rousseau",
+        "avatar": "../../test_profil.png",
+        "karmas": 50,
+        "rank": 2
+    },
+
+    {
+        "name": "Marie",
+        "surname": "Girard",
+        "karmas": 31,
+        "rank": 3
+    },
+
+    {
+        "name": "Sophie",
+        "surname": "Lefèvre",
+        "karmas": 25,
+        "rank": 4
+    },
+
+    {
+        "name": "Hugo",
+        "surname": "Mercier",
+        "karmas": 20,
+        "rank": 5
+    },
+
+    {
+        "name": "Alice",
+        "surname": "Dubois",
+        "karmas": 12,
+        "rank": 6
+    },
+
+    {
+        "name": "Camille",
+        "surname": "Lecomte",
+        "karmas": 15,
+        "rank": 7
+    },
+
+    {
+      "name": "Emma",
+      "surname": "Dupont",
+      "karmas": 10,
+      "rank": 8
+    },
+
+    {
+      "name": "Julien",
+      "surname": "Leclerc",
+      "karmas": 7,
+      "rank": 9
+    },
+    {
+        "name": "Lucas",
+        "surname": "Martin",
+        "karmas": 3,
+        "rank": 10
+    }
+
+  ]
+  
