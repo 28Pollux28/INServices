@@ -14,9 +14,8 @@ export function NavBarNotConnected() {
         <Navbar
             bg="light"
             expand="lg"
-            className="bg-white shadow-sm">
-            <Container>
-                <Navbar.Brand className="d-flex align-items-center" href="/">
+            className="bg-white shadow-sm px-4">
+                <Navbar.Brand className="d-flex align-items-center " href="/">
                     <img
                         alt=""
                         src={logo}
@@ -48,7 +47,6 @@ export function NavBarNotConnected() {
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
-            </Container>
         </Navbar>);
 }
 
@@ -60,8 +58,8 @@ export function NavBarConnected({user}) {
 
 
     return (
-        <Navbar bg="light" expand="xl">
-            <Navbar.Brand href="/" className="d-flex align-items-center ms-2">
+        <Navbar bg="light" className="px-4" expand="xl">
+            <Navbar.Brand href="/" className="d-flex align-items-center">
                 <img
                     alt=""
                     src={logo}

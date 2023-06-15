@@ -11,7 +11,7 @@ const Annonce = ({ annonce }) => {
 
     const truncateText = (text, maxLength) => {
         if (text.length > maxLength) {
-            return (<div><span className='mb-0'>{text.substring(0, maxLength) + ' ...'}</span> <a className="link-dark linkStyle" href='##'><span className="fw-semibold fst-italic">{"en savoir plus"}</span></a></div>);
+            return (<><span className='mb-0'>{text.substring(0, maxLength) + '...'}</span> <p><a className="link-dark linkStyle" href='#'><span className="fw-semibold fst-italic">{"en savoir plus"}</span></a></p></>);
         }
         return text;
     }
@@ -39,9 +39,9 @@ const Annonce = ({ annonce }) => {
                 </div>
                 <div>
                     <Card.Img variant="top" src={annonce.imageAnnonce} />
-                    <Card.Text>
+                    <div>
                         {truncateText(annonce.descriptionAnnonce, 85)}
-                    </Card.Text>
+                    </div>
 
                     <div className="mt-auto">
                         <div className="d-flex m-0">

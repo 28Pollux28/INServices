@@ -403,7 +403,7 @@ func CompleteOffer(c *fiber.Ctx) error {
 func GetLatestPubOffers(c *fiber.Ctx) error {
 	db := c.Locals("db").(*gorm.DB)
 	var offers []models.Offer
-	res := db.Order("created_at desc").Limit(15).Find(&offers)
+	res := db.Order("created_at desc").Limit(24).Find(&offers)
 	if res.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Internal server error",

@@ -5,6 +5,7 @@ import (
 	jwtware "github.com/gofiber/jwt/v2"
 	"github.com/joho/godotenv"
 	"github.com/mailjet/mailjet-apiv3-go"
+	"gorm.io/gorm"
 	"inservices/database"
 	"inservices/handlers"
 	"inservices/routes"
@@ -43,7 +44,7 @@ func main() {
 	if err != nil && !os.IsExist(err) {
 		log.Fatal(err)
 	}
-	// copy default_avatar50.png to uploads/users/50/default_avatar50.png
+    // copy default_avatar50.png to uploads/users/50/default_avatar50.png
 	err = utils.CopyFile("static/assets/default_avatar50.png", "uploads/users/50/default_avatar.png")
 	if err != nil {
 		log.Fatal(err)
@@ -52,14 +53,20 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// Connected with database
-	dbURL := "host=" + utils.GetEnv("DB_HOST", "localhost") +
-		" user=" + utils.GetEnv("DB_USER", "inservices") +
-		" password=" + utils.GetEnv("DB_PASSWORD", "inservices") +
-		" dbname=" + utils.GetEnv("DB_NAME", "inservices") +
-		" port=" + utils.GetEnv("DB_PORT", "5432") +
-		" sslmode=disable TimeZone=Europe/Paris"
-	db, err := database.Connect(dbURL)
+	var db *gorm.DB
+	if utils.GetEnv("DB_DRIVER", "sqlite") == "postgres" {
+		// Connected with database
+		dbURL := "host=" + utils.GetEnv("DB_HOST", "localhost") +
+			" user=" + utils.GetEnv("DB_USER", "inservices") +
+			" password=" + utils.GetEnv("DB_PASSWORD", "inservices") +
+			" dbname=" + utils.GetEnv("DB_NAME", "inservices") +
+			" port=" + utils.GetEnv("DB_PORT", "5432") +
+			" sslmode=disable TimeZone=Europe/Paris"
+		db, err = database.ConnectPostgres(dbURL)
+	} else {
+		db, err = database.ConnectSqlite(utils.GetEnv("DB_FILE_PATH", "inservices.db"))
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}

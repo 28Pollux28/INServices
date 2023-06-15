@@ -47,7 +47,7 @@ export default function App() {
                 </Link>
               </div>
               <div className="mb-3">
-                <Link Link className="FLinkStyle" to="/classement">
+                <Link className="FLinkStyle" to="/classement">
                   Classement des points
                 </Link>
               </div>

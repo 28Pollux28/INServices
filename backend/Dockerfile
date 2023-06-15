@@ -1,7 +1,7 @@
 # Building the binary of the App
 FROM golang:1.19 AS build
-# `boilerplate` should be replaced with your project name
-WORKDIR /go/src/inservice
+
+WORKDIR /go/src/inservices
 
 # Copy all the Code and stuff to compile everything
 COPY . .
@@ -26,13 +26,15 @@ COPY ./static ./static
 COPY ./default_avatar200.png ./uploads/users/200/default_avatar200.png
 COPY ./default_avatar50.png ./uploads/users/50/default_avatar50.png
 
-# `boilerplate` should be replaced here as well
-COPY --from=build /go/src/inservice/app .
+COPY --from=build /go/src/inservices/app .
 ENV DB_HOST="postgres"
 ENV DB_PORT="5432"
 ENV DB_USER="inservices"
 ENV DB_PASSWORD="inservices"
 ENV DB_NAME="inservices"
+ENV DB_DRIVER="sqlite"
+ENV JWT_SECRET="secret"
+
 # Add packages
 RUN apk -U upgrade \
     && apk add --no-cache dumb-init ca-certificates \
