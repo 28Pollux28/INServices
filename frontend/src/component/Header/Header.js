@@ -16,7 +16,7 @@ export function NavBarNotConnected() {
             expand="lg"
             className="bg-white shadow-sm">
             <Container>
-                <Navbar.Brand className="d-flex align-items-center" href="#home">
+                <Navbar.Brand className="d-flex align-items-center" href="/">
                     <img
                         alt=""
                         src={logo}
@@ -31,22 +31,19 @@ export function NavBarNotConnected() {
                     <Nav className="me-auto">
                         <Nav.Link
                             className="offers"
-                            href="frontend\src\view\Login\Login.js"
+                            href="/offers"
                         >
                             Les offres
                         </Nav.Link>
-                        <Nav.Link className="ranking" href="link">
+                        <Nav.Link className="ranking" href="/classement">
                             Classement
-                        </Nav.Link>
-                        <Nav.Link className="askings" href="link">
-                            Les demandes
                         </Nav.Link>
                     </Nav>
                     <Nav className="ms-auto">
-                        <Nav.Link className="connect" href="login">
+                        <Nav.Link className="connect" href="/login">
                             Se connecter
                         </Nav.Link>
-                        <Nav.Link className="bg-#4C97C0 rounded-pill" href="link">
+                        <Nav.Link className="bg-#4C97C0 rounded-pill" href="/register">
                             S'inscrire
                         </Nav.Link>
                     </Nav>
@@ -80,19 +77,16 @@ export function NavBarConnected({user}) {
                     <Nav.Link className="offers" href="/offers">
                         Les offres
                     </Nav.Link>
-                    <Nav.Link className="ranking" href="link">
+                    <Nav.Link className="ranking" href="/classement">
                         Classement
                     </Nav.Link>
-                    <Nav.Link className="askings" href="link">
-                        Les demandes
-                    </Nav.Link>
-                    <Nav.Link className="message" href="link">
+                    <Nav.Link className="message" href="#">
                         Mes Messages
                     </Nav.Link>
                 </Nav>
                 <div className="navbar-nav me-xl-2 align-items-center">
                     <Nav className="me-xl-2">
-                        <Nav.Link className="info" href="/link">
+                        <Nav.Link className="info" href="/profile">
                             <div className="d-flex align-items-center gap-2 text-decoration-none">
                                 <div className="fs-2 fw-bold text-decoration-none"> {karmas}</div>
                                 <div className="coin-container">

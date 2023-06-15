@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 import User from '../../request/service/User';
-import Profil_Picture from "../../profil_picture.svg"
 import ClassementService from '../../request/service/Classement';
 
 
@@ -12,9 +11,8 @@ export default function Classement() {
 
     const userconnected = User.get();
     useEffect(()=>{
-        console.log(userconnected)
         let response;
-        {userconnected ? response = ClassementService.privRankings() : ClassementService.pubRankings() }
+        userconnected ? response = ClassementService.privRankings() : response = ClassementService.pubRankings()
         response.then((data)=>{
             if(data) {
                 if (userconnected){
@@ -24,9 +22,7 @@ export default function Classement() {
                     setdata(data)
                 }
             }
-            console.log(data);
         }).catch((error) => {
-            console.log("gjhgjh");
             setdata(null)
         });
     }, [])
@@ -45,7 +41,7 @@ export default function Classement() {
             <Row>
                 <div >
                     {userconnected ? <p>
-                        <br />Vous êtes classé : {myUser.rank === 1 ? '1er' : `${data[0].rank}ème`}
+                        <br />Vous êtes classé : {myUser.rank === 1 ? '1er' : `${myUser.rank}ème`}
                         </p> : <p>Connectez vous pour voir votre classement !</p>}
                 </div>
             </Row>

@@ -1,0 +1,8 @@
+a.FLinkStyle{
+    color: white;
+    text-decoration: none;
+}
+a.FLinkStyle:hover{
+    text-decoration: underline;
+    color: white;
+}
