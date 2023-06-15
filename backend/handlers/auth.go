@@ -59,7 +59,7 @@ func Refresh(c *fiber.Ctx) error {
 			"error": "invalid refresh token",
 		})
 	}
-	t, rt, err := createToken(user)
+	t, rt, err := createToken(c, user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err,
@@ -67,17 +67,6 @@ func Refresh(c *fiber.Ctx) error {
 	}
 	// delete old refresh token
 	db.Delete(&rToken)
-	// save new refresh token
-	newRt := models.RefreshToken{
-		Token:  rt,
-		UserId: user.ID,
-	}
-	res2 := db.Create(&newRt)
-	if res2.Error != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": res2.Error,
-		})
-	}
 
 	return c.JSON(fiber.Map{"access": t, "refresh": rt})
 }
@@ -213,7 +202,7 @@ func Register(c *fiber.Ctx) error {
 			"error": err,
 		})
 	}
-	newToken, refreshToken, err := createToken(user)
+	newToken, refreshToken, err := createToken(c, user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err,
@@ -261,7 +250,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	t, rt, err := createToken(user)
+	t, rt, err := createToken(c, user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err,
@@ -321,7 +310,7 @@ func VerifyEmail(c *fiber.Ctx) error {
 		})
 	}
 	// Create new token
-	newToken, refreshToken, err := createToken(user)
+	newToken, refreshToken, err := createToken(c, user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err,
@@ -333,7 +322,8 @@ func VerifyEmail(c *fiber.Ctx) error {
 	})
 }
 
-func createToken(user models.User) (string, string, error) {
+func createToken(c *fiber.Ctx, user models.User) (string, string, error) {
+	db := c.Locals("db").(*gorm.DB)
 	// Create token
 	token := jwt.New(jwt.SigningMethodHS256)
 	// Set claims
@@ -360,6 +350,15 @@ func createToken(user models.User) (string, string, error) {
 	rT, err := refreshToken.SignedString([]byte(utils.GetEnv("JWT_SECRET", "secret")))
 	if err != nil {
 		return "", "", err
+	}
+	// save new refresh token
+	newRt := models.RefreshToken{
+		Token:  rT,
+		UserId: user.ID,
+	}
+	res2 := db.Create(&newRt)
+	if res2.Error != nil {
+		return "", "", res2.Error
 	}
 	return t, rT, nil
 }

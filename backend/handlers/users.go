@@ -118,9 +118,9 @@ func GetPrivUser(c *fiber.Ctx) error {
 // GetPubRanking returns the ranking of users based on the karmas they have
 func GetPubRanking(c *fiber.Ctx) error {
 	db := c.Locals("db").(*gorm.DB)
-	var users []models.User
-	// we need to get the 10 users with the highest karma
-	res := db.Order("karmas desc").Limit(10).Find(&users)
+	var users []rankResult
+	// we need to get the ranking of the user and the 10 best users
+	res := db.Raw("select *, rank() over (order by karmas desc) as rank from users limit 10").Scan(&users)
 	if res.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Internal server error",
@@ -128,10 +128,30 @@ func GetPubRanking(c *fiber.Ctx) error {
 	}
 	// we need to return the rank version of the users by mapping them
 	rankUsers := make([]models.RankUser, 0, len(users))
-	for i, user := range users {
-		rankUsers = append(rankUsers, *user.Rank(i + 1))
+	for _, user := range users {
+		rankUser := models.RankUser{
+			PublicUser: models.PublicUser{
+				Name:     user.Name,
+				Surname:  user.Surname,
+				Username: user.Username,
+				Avatar:   user.Avatar,
+			},
+			Karmas: uint(user.Karmas),
+			Rank:   user.Rank,
+		}
+		rankUsers = append(rankUsers, rankUser)
 	}
 	return c.JSON(rankUsers)
+}
+
+type rankResult struct {
+	ID       uint   `json:"id"`
+	Name     string `json:"name"`
+	Surname  string `json:"surname"`
+	Username string `json:"username"`
+	Avatar   string `json:"avatar"`
+	Karmas   int    `json:"karmas"`
+	Rank     int    `json:"rank"`
 }
 
 func GetPrivRanking(c *fiber.Ctx) error {
@@ -152,9 +172,9 @@ func GetPrivRanking(c *fiber.Ctx) error {
 			"error": "User not found",
 		})
 	}
-	var users []models.User
+	var users []rankResult
 	// we need to get the ranking of the user and the 10 best users
-	res = db.Order("karmas desc").Limit(10).Find(&users)
+	res = db.Raw("select *, rank() over (order by karmas desc) as rank from users limit 10").Scan(&users)
 	if res.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Internal server error",
@@ -170,8 +190,18 @@ func GetPrivRanking(c *fiber.Ctx) error {
 	// we need to return the rank of the user and the 10 best users
 	rankUsers := make([]models.RankUser, 0, len(users)+1)
 	rankUsers = append(rankUsers, *me.Rank(rank))
-	for i, user := range users {
-		rankUsers = append(rankUsers, *user.Rank(i + 1))
+	for _, user := range users {
+		rankUser := models.RankUser{
+			PublicUser: models.PublicUser{
+				Name:     user.Name,
+				Surname:  user.Surname,
+				Username: user.Username,
+				Avatar:   user.Avatar,
+			},
+			Karmas: uint(user.Karmas),
+			Rank:   user.Rank,
+		}
+		rankUsers = append(rankUsers, rankUser)
 	}
 	return c.JSON(rankUsers)
 }

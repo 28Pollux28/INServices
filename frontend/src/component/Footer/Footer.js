@@ -1,102 +1,104 @@
 import React from 'react';
-import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-kit';
+import {MDBIcon} from 'mdb-react-ui-kit';
 import Logo_INSA_Lyon from "../../Logo_INSA_Lyon.svg"
 import Logo_INService from "../../Logo_INServices.svg"
+import {Link} from "react-router-dom";
+import './Footer.css';
+import {Col, Container, Row} from "react-bootstrap";
 
 
 
 export default function App() {
   return (
-    <MDBFooter style={{ backgroundColor: '#4C97C0' }} className='text-center text-lg-start text-muted'>
+    <footer style={{ backgroundColor: '#4C97C0' }} className='page-footer text-center text-lg-start text-muted'>
 
       <section className='mt-5'>
-        <MDBContainer className='text-center text-md-start mt-5 d-flex justify-content-center flex-column'>
-          <MDBRow className='mt-3'>
-            <MDBCol md="3" lg="4" xl="3" className='mx-auto mb-4'>
+        <Container className='text-center text-md-start mt-5 d-flex justify-content-center flex-column'>
+          <Row className='mt-3'>
+            <Col md="3" lg="4" xl="3" className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4' style={{ color: 'white' }}>
                 <MDBIcon icon="gem" className="me-3" />
                 <div className="mt-4">
                 <img src={Logo_INService} alt="Logo" className="img-fluid" />
               </div>
               </h6>
-              <p>
-                <a style={{ color: 'white' }}>
+              <div>
+                <p style={{ color: 'white' }}>
                 INServices est un site web permettant de mettre en relation des étudiants issu d’un même campus afin de faciliter les échanges de services
-                </a>
-              </p>
-            </MDBCol>
+                </p>
+              </div>
+            </Col>
 
-            <MDBCol md="2" lg="2" xl="2" className='mx-auto mb-4'>
+            <Col md="2" lg="2" xl="2" className='mx-auto mb-4'>
             <h6 className='text-uppercase fw-bold mb-4' style={{ color: 'white' }}>Navigation</h6>
-              <p>
-                <a style={{ color: 'white' }}>
+              <div className="mb-3">
+                <Link className="FLinkStyle" to="/" >
                   Home
-                </a>
-              </p>
-              <p>
-                <a style={{ color: 'white' }}>
+                </Link>
+              </div>
+              <div className="mb-3">
+                <Link className="FLinkStyle" to="/profile">
                   Mon Profil
-                </a>
-              </p>
-              <p>
-                <a style={{ color: 'white' }}>
+                </Link>
+              </div>
+              <div className="mb-3">
+                <Link className="FLinkStyle" to="/">
                   Les dernières offres
-                </a>
-              </p>
-              <p>
-                <a style={{ color: 'white' }}>
+                </Link>
+              </div>
+              <div className="mb-3">
+                <Link Link className="FLinkStyle" to="/classement">
                   Classement des points
-                </a>
-              </p>
-              <p>
-                <a style={{ color: 'white' }}>
+                </Link>
+              </div>
+              <div className="mb-3">
+                <Link className="FLinkStyle" to="#">
                   Mes messages
-                </a>
-              </p>
-            </MDBCol>
+                </Link>
+              </div>
+            </Col>
 
-            <MDBCol md="3" lg="2" xl="2" className='mx-auto mb-4'>
+            <Col md="3" lg="2" xl="2" className='mx-auto mb-4'>
               <h6 className='text-uppercase fw-bold mb-4' style={{ color: 'white' }}>En plus</h6>
-              <p>
-                <a style={{ color: 'white' }}>
+              <div className="mb-3">
+                <Link className="FLinkStyle" to="#">
                   Mentions légales
-                </a>
-              </p>
-              <p>
-                <a style={{ color: 'white' }}>
+                </Link>
+              </div>
+              <div className="mb-3">
+                <Link className="FLinkStyle" to="#">
                   CGU
-                </a>
-              </p>
-              <p>
-                <a style={{ color: 'white' }}>
+                </Link>
+              </div>
+              <div className="mb-3">
+                <Link className="FLinkStyle" to="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
                   RGPD
-                </a>
-              </p>
-              <p>
-                <a style={{ color: 'white' }}>
+                </Link>
+              </div>
+              <div className="mb-3">
+                <Link className="FLinkStyle" to="/">
                   Cookies
-                </a>
-              </p>
-              <p>
-                <a style={{ color: 'white' }} >
+                </Link>
+              </div>
+              <div className="mb-3">
+                <Link className="FLinkStyle" to="/">
                   Accessibilité
-                </a>
-              </p>
-            </MDBCol>
-
-            <MDBCol md="4" lg="3" xl="3" className='mx-auto mb-md-0 mb-4'>
+                </Link>
+              </div>
+            </Col>
+            <Col md="4" lg="3" xl="3" className='mx-auto mb-md-0 mb-4'>
               <h6 className='text-uppercase fw-bold mb-4' style={{ color: 'white' }}>Contact</h6>
-              <p>
+              <div className="mb-3">
                 <MDBIcon icon="envelope" className="m-0" />
                 <a style={{ color: 'white', textDecoration: 'none' }} href="mailto:contact@inservices.com">contact@inservices.com</a>
-              </p>
+              </div>
               <div className="mt-auto" >
                 <img src={Logo_INSA_Lyon} alt="Logo" className="img-fluid" />
               </div>
-            </MDBCol>
-          </MDBRow>
-        </MDBContainer>
+            </Col>
+          </Row>
+        </Container>
       </section>
-    </MDBFooter>
+    </footer>
   );
 }
