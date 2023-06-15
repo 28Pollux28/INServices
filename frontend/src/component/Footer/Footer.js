@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBFooter, MDBContainer, MDBRow, MDBCol, MDBIcon } from 'mdb-react-ui-kit';
+import {MDBIcon} from 'mdb-react-ui-kit';
 import Logo_INSA_Lyon from "../../Logo_INSA_Lyon.svg"
 import Logo_INService from "../../Logo_INServices.svg"
 import {Link} from "react-router-dom";
@@ -22,11 +22,11 @@ export default function App() {
                 <img src={Logo_INService} alt="Logo" className="img-fluid" />
               </div>
               </h6>
-              <p>
-                <a style={{ color: 'white' }}>
+              <div>
+                <p style={{ color: 'white' }}>
                 INServices est un site web permettant de mettre en relation des étudiants issu d’un même campus afin de faciliter les échanges de services
-                </a>
-              </p>
+                </p>
+              </div>
             </Col>
 
             <Col md="2" lg="2" xl="2" className='mx-auto mb-4'>

@@ -22,7 +22,7 @@ export default function Classement() {
                     setdata(data)
                 }
             }
-        }).catch((error) => {
+        }).catch(() => {
             setdata(null)
         });
     }, [])
