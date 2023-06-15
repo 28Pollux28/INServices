@@ -96,7 +96,8 @@ func CreateOffer(c *fiber.Ctx) error {
 	// change image name in database
 	offer.Image = fname + ".png"
 	db.Omit("AcceptedUserID").Save(&offer)
-
+	user.Karmas -= offer.Price
+	db.Save(&user)
 	return c.JSON(fiber.Map{
 		"message": "Offer created",
 	})
@@ -186,7 +187,11 @@ func EditOffer(c *fiber.Ctx) error {
 		offer.Description = input.Description
 	}
 	if input.Price != 0 {
+		user.Karmas += offer.Price
+		user.Karmas -= input.Price
+		db.Save(&user)
 		offer.Price = input.Price
+
 	}
 	if input.Image != nil {
 		resized := imaging.Fill(*input.Image, 300, 300, imaging.Center, imaging.Lanczos)
@@ -246,6 +251,8 @@ func DeleteOffer(c *fiber.Ctx) error {
 			log.Println("Could not delete image : " + err.Error())
 		}
 	}
+	user.Karmas += offer.Price
+	db.Save(&user)
 	// Delete offer
 	db.Delete(&offer)
 	return c.JSON(fiber.Map{
@@ -390,7 +397,6 @@ func CompleteOffer(c *fiber.Ctx) error {
 	// Set offer status to completed
 	offer.Status = "completed"
 	// Transfer karmas
-	user.Karmas -= offer.Price
 	offer.AcceptedUser.Karmas += offer.Price
 	db.Save(&user)
 	db.Save(&offer.AcceptedUser)
