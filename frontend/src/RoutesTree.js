@@ -22,6 +22,7 @@ const RoutesTree = () => {
             <Route path="/verify/:token" element={<VerifyEmail />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/classement" element={<Classement />} />
+            <Route path="/createAnnonce" element={<CreateAnnoncePage />} />
             <Route path="*" element={<NotFound />} />
             <Route element={<ProtectedRoute />}>
                 <Route path="/myoffers" element={<MesDemandes />}/>

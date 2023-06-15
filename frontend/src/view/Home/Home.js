@@ -27,6 +27,10 @@ const Home = () => {
                 Vous avez été déconnecté avec succès.
             </Alert>
             }
+            {location.state && location.state.createAnnonce === "success" && <Alert variant="success" onClose={() => window.history.replaceState({}, document.title)} dismissible>
+                Votre offre a bien été crée.
+            </Alert>
+            }
 
             <Intro />
             <h1 className="my-2">Les dernière annonces</h1>

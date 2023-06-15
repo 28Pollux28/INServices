@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import Form from 'react-bootstrap/Form';
-import Annonce from '../Annonce/Annonce';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import User from "../../request/service/User";
+import { Navigate, useNavigate } from 'react-router-dom';
+import {Col, Form, Row } from "react-bootstrap";
+import Annonce from '../Annonce/Annonce';
 import Offer from "../../request/service/Offer";
-
-import { Container } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
 import defaultImageAnnonce from '../../defaultImageAnnonce.png';
-
+import Button from 'react-bootstrap/Button';
 const data_user = User.get()
 
+//Construct a login page with Bootstrap React
 const CreerAnnonce = () => {
+    const navigate = useNavigate();
+
     const [formState, setFormState] = useState({
         user_name: "Prénom",
         user_surname: "Parpette",
@@ -25,14 +25,14 @@ const CreerAnnonce = () => {
         status: "available"
     });
 
-
     useEffect(() => {
+        document.title = 'CreateOffer';
         if (data_user) {
             setFormState({
                 user_name: data_user['name'],
                 user_surname: data_user['surname'],
                 user_image: "https://picsum.photos/50/50",
-                name: "Titre de l'annonce" ,
+                name: "Titre de l'annonce",
                 description: "Description de l'annonce",
                 price: "XX",
                 image: defaultImageAnnonce,
@@ -42,18 +42,25 @@ const CreerAnnonce = () => {
         }
     }, [data_user]);
 
-    if (!data_user) {
-        return (
-            <Container>
-                <span className='mt-5 fw-bold d-inline-block'>Vous devez être connecté pour accéder à cette page</span>
-                <p>Vous pouvez vous connecter <a href="/login">ici</a></p>
-            </Container>
-        )
+    const { register, handleSubmit, setError, formState: { errors } } = useForm();
+
+    const onSubmit = async (data) => {
+        const formData = new FormData();
+        formData.append('image', data.image[0]);
+        formData.append('name', data.name);
+        formData.append('description', data.description);
+        formData.append('price', data.price);
+
+        const success = await Offer.add(formData);
+        console.log(success.message);
+        if (success.message == "Offer created") {
+            navigate('/',{state:{createAnnonce: "success"}});
+        };
     }
 
-
-
-
+    if (!data_user) { // already authenticated, redirect to the home
+        return <Navigate to={'/login'} replace />;
+    }
 
     const handleInputChange = (event) => {
         setFormState({
@@ -83,19 +90,9 @@ const CreerAnnonce = () => {
         }
     };
 
-
-    const handleSubmit = () => {
-        // Votre programme JavaScript à exécuter lors du clic sur le bouton Submit
-        console.log('Le bouton Submit a été cliqué !');
-        Offer.add(formState)
-
-        // Vous pouvez ajouter votre code ici pour effectuer une action spécifique
-      };
-
     return (
-        //<div className="d-flex justify-content-between">
         <Row className='mx-auto justify-content-center'>
-             <Col sm={4} md={5} className="m-4 align-self-center text-start fw-semibold">
+            <Col sm={4} md={5} className="m-4 align-self-center text-start fw-semibold">
 
                 <Form>
                     <Form.Group>
@@ -103,6 +100,7 @@ const CreerAnnonce = () => {
                         <Form.Control
                             type="text"
                             name="name"
+                            {...register("name", { required: true })}
                             onChange={handleInputChange}
                         />
                     </Form.Group>
@@ -112,6 +110,7 @@ const CreerAnnonce = () => {
                         <Form.Control
                             type="file"
                             accept="image/*"
+                            {...register("image", { required: true })}
                             onChange={handleFileChange}
                         />
                     </Form.Group>
@@ -121,7 +120,9 @@ const CreerAnnonce = () => {
                         <Form.Control
                             type="text"
                             name="description"
+                            {...register("description", { required: true })}
                             onChange={handleInputChange}
+
                         />
                     </Form.Group>
 
@@ -130,13 +131,12 @@ const CreerAnnonce = () => {
                         <Form.Control
                             type="text"
                             name="price"
+                            {...register("price", { required: true })}
                             onChange={handleInputChange}
                         />
                     </Form.Group>
-
                 </Form>
-
-                <Button variant="primary" className="d-flex m-auto mt-3" type="submit" onClick={handleSubmit}>
+                <Button variant="primary" className="d-flex m-auto mt-3" type="submit" onClick={handleSubmit(onSubmit)}>
                     Submit
                 </Button>
 
