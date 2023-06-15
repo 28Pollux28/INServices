@@ -26,7 +26,7 @@ COPY ./static ./static
 COPY ./default_avatar200.png ./uploads/users/200/default_avatar200.png
 COPY ./default_avatar50.png ./uploads/users/50/default_avatar50.png
 
-COPY --from=build /go/src/inservice/app .
+COPY --from=build /go/src/inservices/app .
 ENV DB_HOST="postgres"
 ENV DB_PORT="5432"
 ENV DB_USER="inservices"
