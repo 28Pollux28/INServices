@@ -14,4 +14,5 @@ func UserRoutes(router fiber.Router, jwtMiddleware *fiber.Handler) {
 	restricted.Post("/avatar", handlers.UploadUserAvatar)
 	restricted.Get("/rankings", handlers.GetPrivRanking)
 	restricted.Get("/me", handlers.GetPrivUser)
+	restricted.Post("/edit", handlers.EditUser)
 }

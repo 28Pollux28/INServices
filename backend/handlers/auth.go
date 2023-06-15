@@ -72,8 +72,8 @@ func Refresh(c *fiber.Ctx) error {
 }
 
 type RegisterUser struct {
-	Name                 string `json:"name" form:"name" validate:"required" name:"name"`
-	Surname              string `json:"surname" form:"surname" validate:"required" name:"surname"`
+	Name                 string `json:"name" form:"name" validate:"required,max=32" name:"name"`
+	Surname              string `json:"surname" form:"surname" validate:"required,max=32" name:"surname"`
 	Username             string `json:"username" form:"username" validate:"required,max=32" name:"username"`
 	Password             string `json:"password" form:"password" validate:"required,min=6,max=32" name:"password"`
 	PasswordConfirmation string `json:"password_confirmation" form:"password_confirmation" validate:"required,min=6,max=32" name:"password_confirmation"`
@@ -290,17 +290,11 @@ func VerifyEmail(c *fiber.Ctx) error {
 	// Get user from database
 	var user models.User
 	res := db.First(&user, claims["id"])
-	if res.Error != nil {
+	if res.Error != nil || user.Email != claims["email"] {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "invalid token",
 		})
 	}
-	//Check if user is already verified
-	//if user.EmailVerified {
-	//	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-	//		"error": "email already verified",
-	//	})
-	//}
 	// Update user
 	user.EmailVerified = true
 	res = db.Save(&user)
@@ -330,12 +324,6 @@ func createToken(c *fiber.Ctx, user models.User) (string, string, error) {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["exp"] = time.Now().Add(time.Minute * 2).Unix()
 	claims["id"] = user.ID
-	claims["name"] = user.Name
-	claims["surname"] = user.Surname
-	claims["email"] = user.Email
-	claims["phone"] = user.Phone
-	claims["email_verified"] = user.EmailVerified
-	claims["karmas"] = user.Karmas
 
 	// Generate encoded token and send it as response.
 	t, err := token.SignedString([]byte(utils.GetEnv("JWT_SECRET", "secret")))
