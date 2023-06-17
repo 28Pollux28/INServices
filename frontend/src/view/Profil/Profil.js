@@ -3,8 +3,9 @@ import { Container, Nav, Navbar, Button } from "react-bootstrap";
 import "./Profile.css";
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import User from "../../request/service/User";
 
-export function ProfileSetting() {
+export default function ProfileSetting() {
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -23,11 +24,29 @@ export function ProfileSetting() {
     }
   };
 
+  const buttonCliqued =async()=>{
+    const dataJSON={
+      "name": firstName,
+      "surname": lastName,
+      "username": username,
+      "email": email,
+      "phone": phone,
+    }
+
+    let response = await User.editUser(dataJSON)
+    if(response[0]==true){
+      window.alert("Vos modifications ont bien été modifées")
+    }
+    else{
+      window.alert("ERREUR : Vos modifications n'ont pas été modifées")
+    }
+  }
+
 
   return (
     <div>
       <div className="container-xl px-4 mt-4">
-        <nav className="nav nav-borders">
+        {/* <nav className="nav nav-borders">
           <a
             className="nav-link active ms-0"
             href="https://www.bootdey.com/snippets/view/bs5-edit-profile-account-details"
@@ -56,7 +75,7 @@ export function ProfileSetting() {
           >
             Notifications
           </a>
-        </nav>
+        </nav> */}
         <hr className="mt-0 mb-4" />
         <div className="row">
           <div className="col-xl-4">
@@ -163,7 +182,7 @@ export function ProfileSetting() {
                       />
                     </div>
                   </div>
-                  <button className="btn btn-primary" type="button">
+                  <button className="btn btn-primary" type="button" onClick={buttonCliqued}>
                     Save changes
                   </button>
                 </form>

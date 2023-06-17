@@ -11,6 +11,8 @@ import Classement from "./view/Classement/Classement"
 import ProtectedRoute from "./component/ProtectedRoute/ProtectedRoute";
 import MesDemandes from "./view/MesDemandes/MesDemandes";
 import CreateAnnoncePage from "./view/CreateAnnonce/CreateAnnoncePage";
+import ProfileSetting from "./view/Profil/Profil"
+
 
 const RoutesTree = () => {
     return (
@@ -26,6 +28,7 @@ const RoutesTree = () => {
             <Route path="*" element={<NotFound />} />
             <Route element={<ProtectedRoute />}>
                 <Route path="/myoffers" element={<MesDemandes />}/>
+                <Route path="/profile" element={<ProfileSetting />} />
             </Route>
         </Routes>
     );

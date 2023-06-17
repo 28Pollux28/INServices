@@ -92,5 +92,26 @@ export default {
         if (token && token.access) {
             localStorage.setItem("token", JSON.stringify(token));
         }
-    }
+    },
+
+    editUser: async (data) => {
+        try {
+            const response = await privateClient.post('user/restricted/edit', 
+            {
+                "name": data.name,
+                "surname": data.surname,
+                "username":data.username,
+                "email":data.email,
+                "phone":data.phone
+            }
+            );
+
+            if (response.data) {
+                return [true, response.data] ;
+            }
+            return false
+        } catch (error) {
+            return [false, error.response.data];
+        }
+    },
 };
