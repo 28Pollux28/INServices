@@ -1,5 +1,6 @@
 import axios from 'axios'
 import User from './service/User'
+import {wait} from "@testing-library/user-event/dist/utils";
 
 
 export const publicClient = axios.create({
@@ -50,6 +51,10 @@ privateClient.interceptors.response.use(
                     localStorage.removeItem("token");
                     return Promise.reject(_error);
                 }
+            }
+            if (isRefreshing) {
+                await wait(500);
+                return privateClient(originalConfig);
             }
         }
 

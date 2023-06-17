@@ -1,0 +1,34 @@
+a.linkStyle{
+    text-decoration: none;
+}
+
+a.linkStyle:hover{
+    text-decoration: underline;
+}
+
+div.imageKarmaCoin{
+    width: 10%
+}
+
+
+button.btn-pay{
+    --purple:  #6f42c1;
+    --dark-purple: #6339af;
+    --light-purple: #7d54c7;
+
+    --bs-btn-bg: var(--purple);
+    --bs-btn-border-color: var(--purple);
+    --bs-btn-border-radius: .5rem;
+
+    --bs-btn-hover-bg: var(--dark-purple);
+    --bs-btn-hover-border-color: var(--dark-purple);
+    --bs-btn-focus-shadow-rgb: 111, 66, 193;
+    --bs-btn-active-color: var(--purple);
+    --bs-btn-active-bg: var(--dark-purple);
+    --bs-btn-active-border-color: var(--dark-purple);
+    --bs-btn-disabled-bg: var(--light-purple);
+    --bs-btn-disabled-border-color: var(--light-purple);
+
+
+}
+

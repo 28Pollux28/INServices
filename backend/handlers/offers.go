@@ -96,6 +96,11 @@ func CreateOffer(c *fiber.Ctx) error {
 	// change image name in database
 	offer.Image = fname + ".png"
 	db.Omit("AcceptedUserID").Save(&offer)
+	if user.Karmas < offer.Price {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Not enough karmas",
+		})
+	}
 	user.Karmas -= offer.Price
 	db.Save(&user)
 	return c.JSON(fiber.Map{
@@ -163,17 +168,24 @@ func EditOffer(c *fiber.Ctx) error {
 	var input EditOfferInput
 	if err := c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid input",
-			"err":   err.Error(),
+			"error": err.Error(),
 		})
 	}
-	fname, img, err := utils.ExtractImageFromForm(c, "image", 1024*1024*10)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"err": err.Error(),
-		})
+	// Check if image was sent in request
+	// If image was sent, extract it from form
+	// If image was not sent, set it to nil
+	var fname string
+	var img *image.Image
+	if input.Image != nil {
+		fname, img, err = utils.ExtractImageFromForm(c, "image", 1024*1024*10)
+		if err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		}
+		input.Image = img
 	}
-	input.Image = img
+
 	// Validate input
 	errors := validateOfferInput(input)
 	if errors != nil {
@@ -409,7 +421,7 @@ func CompleteOffer(c *fiber.Ctx) error {
 func GetLatestPubOffers(c *fiber.Ctx) error {
 	db := c.Locals("db").(*gorm.DB)
 	var offers []models.Offer
-	res := db.Order("created_at desc").Limit(24).Find(&offers)
+	res := db.Where("visible = ? AND status = ?", true, "available").Order("created_at desc").Limit(24).Find(&offers)
 	if res.Error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Internal server error",
@@ -491,13 +503,18 @@ func GetMyOffers(c *fiber.Ctx) error {
 	// Get offers
 
 	var offers []models.Offer
-	err := db.Model(&user).Preload("AcceptedUser").Association("Offers").Find(&offers)
+	err := db.Model(&user).Order("created_at desc").Preload("AcceptedUser").Association("Offers").Find(&offers)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Internal server error",
 		})
 	}
-	return c.JSON(offers)
+	// map offers to private offers
+	privateOffers := make([]models.PrivateOffer, 0, len(offers))
+	for _, offer := range offers {
+		privateOffers = append(privateOffers, offer.Private())
+	}
+	return c.JSON(privateOffers)
 }
 
 func GetMyOfferByID(c *fiber.Ctx) error {
@@ -533,5 +550,5 @@ func GetMyOfferByID(c *fiber.Ctx) error {
 			"error": "Offer does not belong to user",
 		})
 	}
-	return c.JSON(offer)
+	return c.JSON(offer.Private())
 }
