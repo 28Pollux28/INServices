@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -11,11 +11,10 @@ import Offer from "../../request/service/Offer";
 
 const Annonce = ({ annonce, previewPage = false }) => {
 
-
     const user_name = annonce.user_name;
     const user_surname = annonce.user_surname;
-    const user_image = annonce.user_image;
-    const titre = annonce.name;
+    const user_image = 'http://localhost:3000/assets/users/50/' + annonce.user_image;
+    const titre = annonce.title;
     const description = annonce.description;
     let imageAnnonce = 'http://localhost:3000/assets/offers/300/' + annonce.image;
     if(previewPage) {

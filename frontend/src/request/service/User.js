@@ -97,13 +97,7 @@ export default {
     editUser: async (data) => {
         try {
             const response = await privateClient.post('user/restricted/edit', 
-            {
-                "name": data.name,
-                "surname": data.surname,
-                "username":data.username,
-                "email":data.email,
-                "phone":data.phone
-            }
+                data
             );
 
             if (response.data) {
@@ -114,4 +108,18 @@ export default {
             return [false, error.response.data];
         }
     },
+    editAvatar: async (data) => {
+        try {
+            const response = await privateClient.post('user/restricted/avatar',
+                data
+            );
+
+            if (response.data) {
+                return [true, response.data] ;
+            }
+            return false
+        } catch (error) {
+            return [false, error.response.data];
+        }
+    }
 };

@@ -133,7 +133,7 @@ const Register = () => {
                                     </Alert>}
                                 </Form.Group>
                                 <button className="btn btn-primary my-3"
-                                        onClick={handleSubmit(onSubmit)}>Connexion
+                                        onClick={handleSubmit(onSubmit)}>S'inscrire
                                 </button>
                             </Form>
                         </Card.Body>
