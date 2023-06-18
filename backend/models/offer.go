@@ -18,7 +18,6 @@ type Offer struct {
 type PublicOffer struct {
 	ID          uint   `json:"id"`
 	UserID      uint   `json:"user_id"`
-	ID          uint   `json:"id"`
 	Name        string `json:"title"`
 	Description string `json:"description"`
 	Price       uint   `json:"price"`
@@ -41,7 +40,6 @@ func (offer Offer) Public() PublicOffer {
 	return PublicOffer{
 		ID:          offer.ID,
 		UserID:      offer.UserID,
-		ID:          offer.ID,
 		Name:        offer.Name,
 		Description: offer.Description,
 		Price:       offer.Price,
