@@ -22,7 +22,7 @@ const Annonce = ({ annonce, previewPage = false }) => {
         imageAnnonce = annonce.image;
     }
     const karma = annonce.price;
-    
+
 
     const truncateText = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -39,10 +39,18 @@ const Annonce = ({ annonce, previewPage = false }) => {
     }
 
 
-    
-
-
-
+    const acceptOffer = async () => {
+        console.log("OFFRE", annonce);
+        const response = await Offer.acceptOffer(annonce.id);
+        console.log("REPONSE", response[1]);
+        if (response[0] === true) {
+            window.alert(response[1].message)
+            
+        } 
+        else{
+            window.alert(response[1].error)
+    }
+};
     return (
         <Card className="text-start" >
             <Card.Body className="d-flex flex-column">
@@ -83,7 +91,7 @@ const Annonce = ({ annonce, previewPage = false }) => {
                         </div>
 
                         <div>
-                            {!previewPage && <Button variant="primary" className="d-flex m-auto mt-1" >Contacter</Button>}
+                            {!previewPage && <Button variant="primary" className="d-flex m-auto mt-1" onClick={acceptOffer} >Contacter</Button>}
                         </div>
 
                     </div>
