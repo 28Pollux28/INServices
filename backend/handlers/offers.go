@@ -1,11 +1,6 @@
 package handlers
 
 import (
-	"github.com/disintegration/imaging"
-	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
-	"gorm.io/gorm"
 	"image"
 	"inservices/models"
 	"inservices/utils"
@@ -13,6 +8,12 @@ import (
 	"os"
 	"reflect"
 	"strings"
+
+	"github.com/disintegration/imaging"
+	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
+	"gorm.io/gorm"
 )
 
 type CreateOfferInput struct {
@@ -294,7 +295,7 @@ func AcceptOffer(c *fiber.Ctx) error {
 	}
 	// Check if offer doesn't belong to user
 	if offer.UserID == user.ID {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot accept own offer",
 		})
 	}
@@ -308,12 +309,6 @@ func AcceptOffer(c *fiber.Ctx) error {
 	if !offer.Visible {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Offer is not visible",
-		})
-	}
-	// Check if user has enough karmas
-	if user.Karmas < offer.Price {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Not enough Karmas",
 		})
 	}
 	// Set offer status to accepted

@@ -10,6 +10,7 @@ import Logout from "./view/Logout/Logout";
 import Classement from "./view/Classement/Classement"
 import ProtectedRoute from "./component/ProtectedRoute/ProtectedRoute";
 import MesDemandes from "./view/MesDemandes/MesDemandes";
+import CreateAnnoncePage from "./view/CreateAnnonce/CreateAnnoncePage";
 
 const RoutesTree = () => {
     return (
@@ -21,6 +22,7 @@ const RoutesTree = () => {
             <Route path="/verify/:token" element={<VerifyEmail />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/classement" element={<Classement />} />
+            <Route path="/createAnnonce" element={<CreateAnnoncePage />} />
             <Route path="*" element={<NotFound />} />
             <Route element={<ProtectedRoute />}>
                 <Route path="/myoffers" element={<MesDemandes />}/>
