@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./img/logo.svg";
 import karmaCoin from "../../karmaCoin.svg"
-import {Container, Nav, Navbar} from "react-bootstrap";
+import {Nav, Navbar} from "react-bootstrap";
 import "./Header.css";
 import {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
@@ -101,6 +101,7 @@ export function NavBarConnected({user}) {
                                     <img
                                         src={process.env.REACT_APP_BACKEND_URL + "/assets/users/50/" + user.avatar}
                                         className="rounded-circle"
+                                        alt=""
                                     />
                                 </div>
                             </div>
@@ -116,7 +117,7 @@ export function NavBarConnected({user}) {
         </Navbar>);
 }
 
-export function ConditionalFunction() {
+export function ConditionalFunction({updateNavBar}) {
     const [user, setUser] = useState(null);
     const location = useLocation();
     useEffect(() => {
@@ -124,10 +125,10 @@ export function ConditionalFunction() {
             if (user != null) {
                 setUser(user);
             }
-        }).catch((error) => {
+        }).catch(() => {
             setUser(null);
         });
-    }, [location]);
+    }, [location, updateNavBar]);
     if (user != null) {
         return <NavBarConnected user={user}/>
     } else {

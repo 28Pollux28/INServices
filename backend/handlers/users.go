@@ -193,7 +193,7 @@ func EditUser(c *fiber.Ctx) error {
 			})
 		}
 		// Check password strength
-		if ok1, ok2, ok3, ok4 := utils.CheckPasswordStrength(body.Password); ok1 && ok2 && ok3 && ok4 {
+		if ok1, ok2, ok3, ok4 := utils.CheckPasswordStrength(body.Password); !(ok1 && ok2 && ok3 && ok4) {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error": "Password is too weak",
 			})

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import User from "../../request/service/User";
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {Col, Form, Row } from "react-bootstrap";
 import Annonce from '../Annonce/Annonce';
 import Offer from "../../request/service/Offer";
 import defaultImageAnnonce from '../../defaultImageAnnonce.png';
 import Button from 'react-bootstrap/Button';
-const data_user = User.get()
 
 //Construct a login page with Bootstrap React
 const CreerAnnonce = () => {
@@ -15,9 +14,9 @@ const CreerAnnonce = () => {
 
     const [formState, setFormState] = useState({
         user_name: "Prénom",
-        user_surname: "Parpette",
+        user_surname: "Nom",
         user_image: "https://picsum.photos/50/50",
-        name: "Titre de l'annonce",
+        title: "Titre de l'annonce",
         description: "Description de l'annonce",
         price: "XX",
         image: defaultImageAnnonce,
@@ -26,40 +25,37 @@ const CreerAnnonce = () => {
     });
 
     useEffect(() => {
-        document.title = 'CreateOffer';
-        if (data_user) {
+        const data_user = User.getMe();
+        data_user.then((data) => {
+            console.log(data);
             setFormState({
-                user_name: data_user['name'],
-                user_surname: data_user['surname'],
-                user_image: "https://picsum.photos/50/50",
-                name: "Titre de l'annonce",
+                user_name: data['name'],
+                user_surname: data['surname'],
+                user_image: data['avatar'],
+                title: "Titre de l'annonce",
                 description: "Description de l'annonce",
                 price: "XX",
                 image: defaultImageAnnonce,
                 visible: true,
                 status: "available"
             });
-        }
-    }, [data_user]);
+        });
+    }, []);
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm();
 
     const onSubmit = async (data) => {
         const formData = new FormData();
         formData.append('image', data.image[0]);
-        formData.append('name', data.name);
+        formData.append('name', data.title);
         formData.append('description', data.description);
         formData.append('price', data.price);
 
         const success = await Offer.add(formData);
         console.log(success.message);
-        if (success.message == "Offer created") {
+        if (success.message === "Offer created") {
             navigate('/',{state:{createAnnonce: "success"}});
-        };
-    }
-
-    if (!data_user) { // already authenticated, redirect to the home
-        return <Navigate to={'/login'} replace />;
+        }
     }
 
     const handleInputChange = (event) => {
@@ -99,8 +95,8 @@ const CreerAnnonce = () => {
                         <Form.Label>Titre</Form.Label>
                         <Form.Control
                             type="text"
-                            name="name"
-                            {...register("name", { required: true })}
+                            name="title"
+                            {...register("title", { required: true })}
                             onChange={handleInputChange}
                         />
                     </Form.Group>

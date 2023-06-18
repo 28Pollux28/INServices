@@ -92,5 +92,34 @@ export default {
         if (token && token.access) {
             localStorage.setItem("token", JSON.stringify(token));
         }
+    },
+
+    editUser: async (data) => {
+        try {
+            const response = await privateClient.post('user/restricted/edit', 
+                data
+            );
+
+            if (response.data) {
+                return [true, response.data] ;
+            }
+            return false
+        } catch (error) {
+            return [false, error.response.data];
+        }
+    },
+    editAvatar: async (data) => {
+        try {
+            const response = await privateClient.post('user/restricted/avatar',
+                data
+            );
+
+            if (response.data) {
+                return [true, response.data] ;
+            }
+            return false
+        } catch (error) {
+            return [false, error.response.data];
+        }
     }
 };
