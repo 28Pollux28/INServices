@@ -37,7 +37,7 @@ func SendEmailVerification(client *mailjet.Client, user models.User, token strin
 	//	},
 	//}
 	//messages := mailjet.MessagesV31{Info: messagesInfo}
-	//res, err := client.SendMailV31(&messages)
+	//_, err = client.SendMailV31(&messages)
 	//if err != nil {
 	//	return err
 	//}

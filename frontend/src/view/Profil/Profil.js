@@ -242,7 +242,7 @@ export default function ProfileSetting({setUpdateNavBar}) {
                                 </Form>
                             </div>
                         </div>
-                        <div className="card mb-4">
+                        <div className="card">
                             <div className="card-header">Mot de passe</div>
                             <div className="card-body">
                                 <Form>

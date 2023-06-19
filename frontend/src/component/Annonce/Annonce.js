@@ -7,10 +7,11 @@ import KarmaCoin from '../../karmaCoin.svg';
 import Container from 'react-bootstrap/esm/Container';
 import './Annonce.css';
 import Offer from "../../request/service/Offer";
+import {useNavigate} from "react-router-dom";
 
 
-const Annonce = ({ annonce, previewPage = false }) => {
-
+const Annonce = ({ annonce, previewPage = false , user, setUpdateState}) => {
+    const navigate = useNavigate();
     const user_name = annonce.user_name;
     const user_surname = annonce.user_surname;
     const user_image = 'http://localhost:3000/assets/users/50/' + annonce.user_image;
@@ -39,12 +40,14 @@ const Annonce = ({ annonce, previewPage = false }) => {
 
 
     const acceptOffer = async () => {
-        console.log("OFFRE", annonce);
+        if (user === null){
+            navigate('/login');
+            return;
+        }
         const response = await Offer.acceptOffer(annonce.id);
-        console.log("REPONSE", response[1]);
         if (response[0] === true) {
             window.alert(response[1].message)
-            
+            setUpdateState({})
         } 
         else{
             window.alert(response[1].error)
@@ -53,7 +56,7 @@ const Annonce = ({ annonce, previewPage = false }) => {
     return (
         <Card className="text-start" >
             <Card.Body className="d-flex flex-column">
-                <div className='h-25'>
+                <div className=''>
                     <Row className="align-items-center m-0 pb-1">
                         <Col className="p-0" xs={2}>
                             <Card.Img className="" src={user_image} />
@@ -62,9 +65,9 @@ const Annonce = ({ annonce, previewPage = false }) => {
                             <Card.Subtitle className="ms-2 text-muted">{user_name} {user_surname}</Card.Subtitle>
                         </Col>
                     </Row>
-                    <a href='#' className="link-dark linkStyle"><Card.Title className='fw-semibold'>{truncateTitle(titre, 42)}</Card.Title></a>
+                    <a href='#' className="link-dark linkStyle"><Card.Title className='fw-semibold text-truncate'>{truncateTitle(titre, 42)}</Card.Title></a>
                 </div>
-                <div>
+                <div className="d-flex flex-column flex-grow-1">
                     <div className="square-image-container">
                         <Card.Img variant="top" src={imageAnnonce} className="square-image" />
                     </div>
@@ -90,7 +93,8 @@ const Annonce = ({ annonce, previewPage = false }) => {
                         </div>
 
                         <div>
-                            {!previewPage && <Button variant="primary" className="d-flex m-auto mt-1" onClick={acceptOffer} >Contacter</Button>}
+                            {!previewPage && user && <Button variant="outline-primary" className="d-flex m-auto mt-1" onClick={acceptOffer} >Accepter l'offre</Button>}
+                            {!previewPage && !user && <Button variant="outline-primary" className="d-flex m-auto mt-1" onClick={() => navigate('/login')} >Accepter l'offre</Button>}
                         </div>
 
                     </div>

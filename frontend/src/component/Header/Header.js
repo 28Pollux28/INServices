@@ -72,14 +72,14 @@ export function NavBarConnected({user}) {
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                    <Nav.Link className="offers" href="/offers">
-                        Les offres
+                    <Nav.Link className="create" href="/createannonce">
+                        Poster une Offre
                     </Nav.Link>
                     <Nav.Link className="ranking" href="/classement">
                         Classement
                     </Nav.Link>
-                    <Nav.Link className="message" href="#">
-                        Mes Messages
+                    <Nav.Link className="myOffers" href="/myoffers">
+                        Mes Offres
                     </Nav.Link>
                 </Nav>
                 <div className="navbar-nav me-xl-2 align-items-center">
