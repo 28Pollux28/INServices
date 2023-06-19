@@ -12,7 +12,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Offer from "../../request/service/Offer";
 import "./Demande.css";
 
-function Demande({demande, forceUpdate}) {
+function Demande({demande, forceUpdate, setUpdateNavBar}) {
 
     const truncateText = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -44,6 +44,7 @@ function Demande({demande, forceUpdate}) {
         const [success, response] = await Offer.deleteOffer(demande.id);
         if (success === true) {
             forceUpdate();
+            setUpdateNavBar({});
         } else {
             alert("Erreur lors de la suppression de votre demande\n"+response.error);
         }
@@ -60,7 +61,7 @@ function Demande({demande, forceUpdate}) {
 
     const completeDemande = async () => {
         const [success, response] = await Offer.completeOffer(demande.id);
-        console.log(response);
+        // console.log(response);
         if (success === true) {
             forceUpdate();
         } else {

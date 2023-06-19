@@ -27,7 +27,7 @@ const CreerAnnonce = () => {
     useEffect(() => {
         const data_user = User.getMe();
         data_user.then((data) => {
-            console.log(data);
+            // console.log(data);
             setFormState({
                 user_name: data['name'],
                 user_surname: data['surname'],
@@ -52,7 +52,7 @@ const CreerAnnonce = () => {
         formData.append('price', data.price);
 
         const success = await Offer.add(formData);
-        console.log(success.message);
+        // console.log(success.message);
         if (success.message === "Offer created") {
             navigate('/',{state:{createAnnonce: "success"}});
         }
@@ -123,7 +123,7 @@ const CreerAnnonce = () => {
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Label>Récompence</Form.Label>
+                        <Form.Label>Récompense</Form.Label>
                         <Form.Control
                             type="text"
                             name="price"

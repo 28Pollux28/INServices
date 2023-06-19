@@ -5,7 +5,7 @@ export default {
         try {
             const response = await pubClient.get('user/public/rankings/');
             if(response.data){
-                console.log(response.data);
+                // console.log(response.data);
                 return response.data
             }
             return null;
@@ -17,7 +17,7 @@ export default {
         try {
             const response = await privateClient.get('user/restricted/rankings/');
             if(response.data){
-                console.log(response.data);
+                // console.log(response.data);
                 return response.data
             }
             return null;

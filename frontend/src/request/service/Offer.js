@@ -44,19 +44,6 @@ export default {
             return false;
         }
     },
-    acceptOffer: async (id) => {
-        try {
-            const response = await privateClient.post(`offers/restricted/accept/${id}`, {});
-            console.log("REPONSE SERVER", response);
-            if (response.data) {
-                return [true, response.data];
-            }
-
-            return false;
-        } catch (error) {
-            return [false, error.response.data];
-        }
-    },
 
     getMyOffers: async () => {
         try {

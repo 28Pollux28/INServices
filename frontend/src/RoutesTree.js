@@ -24,12 +24,12 @@ const RoutesTree = ({setUpdateNavBar}) => {
             <Route path="/verify/:token" element={<VerifyEmail />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/classement" element={<Classement />} />
-            <Route path="*" element={<NotFound />} />
             <Route element={<ProtectedRoute />}>
                 <Route path="/createAnnonce" element={<CreateAnnoncePage />} />
-                <Route path="/myoffers" element={<MesDemandes />}/>
+                <Route path="/myoffers" element={<MesDemandes setUpdateNavBar={setUpdateNavBar} />}/>
                 <Route path="/profile" element={<ProfileSetting setUpdateNavBar={setUpdateNavBar} />} />
             </Route>
+            <Route path="*" element={<NotFound />} />
         </Routes>
     );
 }

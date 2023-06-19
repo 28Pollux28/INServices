@@ -94,6 +94,7 @@ export default function App() {
               </div>
               <div className="mt-auto" >
                 <img src={Logo_INSA_Lyon} alt="Logo" className="img-fluid" />
+                <span style={{ color: 'white' }}>INSERVICES n'est pas associé à INSA LYON</span>
               </div>
             </Col>
           </Row>

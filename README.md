@@ -33,7 +33,7 @@ docker-compose up
 - Lancer le frontend
 ```bash
 cd frontend
-npm run serve
+npm run start
 ```
 - Lancer le backend
 ```bash
