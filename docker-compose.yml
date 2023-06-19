@@ -28,6 +28,8 @@ services:
       - DB_NAME=inservices
       - DB_DRIVER=postgres
       - JWT_SECRET=secret
+      - MAILJET_API_KEY=b449f4601058d3e0dfdc160fef3f5d2f
+      - MAILJET_API_SECRET=4aa3b27e3c4bf38affdc0c547795bc51
     ports: 
       - "3000:3000"
     command:

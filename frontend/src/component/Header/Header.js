@@ -71,8 +71,8 @@ export function NavBarConnected({user}) {
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
             <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                    <Nav.Link className="create" href="/createannonce">
+                <Nav className="fs-5 me-auto">
+                    <Nav.Link className=" create" href="/createannonce">
                         Poster une Offre
                     </Nav.Link>
                     <Nav.Link className="ranking" href="/classement">
@@ -108,7 +108,7 @@ export function NavBarConnected({user}) {
                         </Nav.Link>
                     </Nav>
                     <Nav className="">
-                        <Nav.Link className="btn btn-danger rounded-pill" href="/logout">
+                        <Nav.Link className="btn btn-outline-secondary rounded-pill" href="/logout">
                             <LogoutIcon className="mx-2"/> <span className="me-2">Se déconnecter</span>
                         </Nav.Link>
                     </Nav>
